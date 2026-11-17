@@ -1,0 +1,29 @@
+{
+  "model": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "backend": "vLLM-Ascend",
+  "architecture": "Qwen3_5ForConditionalGeneration",
+  "dtype": "bfloat16",
+  "tensor_parallel_size": 1,
+  "decision_types": [
+    "noul",
+    "choice",
+    "score"
+  ],
+  "probabilities": "full calibrated option probability map",
+  "weights": "original pinned safetensors",
+  "protocol_version": "systemone-compatible/local-1",
+  "cache": {
+    "enabled": false,
+    "response_cache": false,
+    "scope": "HTTP response caching",
+    "adapter": {}
+  },
+  "endpoints": [
+    "/health",
+    "/v1/decide/info",
+    "/v1/systemone",
+    "/v1/decide"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "model_index": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B (effort auto)",
+  "timestamp_utc": "2026-11-17T19:57:08.441331+00:00",
+  "status": "blocked_native_namespace_mapping_resource",
+  "stage": "C_native_vllm_ascend_preflight",
+  "host": "openlibing-vllm8",
+  "first_error": {
+    "type": "ValueError",
+    "message": "There is no module or parameter named 'layers' in AscendQwen3_5ForConditionalGeneration.",
+    "source_log": "/workspace/jev-adaptation/model-44/evidence/C-first-error.log",
+    "first_error_excerpt": "/tmp/model44-probe3.log lines 172-183; Qwen3_5 loader load_weights rejected custom tower.safetensors namespace before engine startup"
+  },
+  "reproduction": {
+    "command": "python3 /workspace/jev-adaptation/model-44/vllm-base-probe/probe2.py",
+    "probe_config": "LLM(model=/workspace/jev-adaptation/model-44/vllm-base-probe, tokenizer=/workspace/jev-adaptation/model-44/source-audit, trust_remote_code=True, tensor_parallel_size=2, dtype=bfloat16, max_model_len=256, enforce_eager=True, gpu_memory_utilization=0.8)",
+    "logs": [
+      "/tmp/model44-probe2.log",
+      "/tmp/model44-probe3.log"
+    ]
+  },
+  "architecture": {
+    "config_architectures": [
+      "Qwen3_5ForConditionalGeneration"
+    ],
+    "model_type": "qwen3_5",
+    "custom_weight_files": [
+      "tower.safetensors",
+      "visual.safetensors",
+      "scorer.safetensors",
+      "aux_scorers.safetensors",
+      "calibration.safetensors"
+    ],
+    "known_mapping_gap": "checkpoint keys are custom language_model/model/tower namespaces; stock AscendQwen3_5ForConditionalGeneration has no top-level layers parameter"
+  },
+  "resource_blocker": {
+    "observed_model170_api_pid": 286658,
+    "observed_model170_engine_pid": 287054,
+    "observed_model170_worker_pids": [
+      287677,
+      287678
+    ],
+    "npu_smi": "/workspace/jev-adaptation/model-44/evidence/A-npu-smi.txt",
+    "policy": "do not stop another lane; no second native load while both NPUs occupied"
+  },
+  "environment": {
+    "versions_file": "/workspace/jev-adaptation/model-44/evidence/A-runtime-versions.txt",
+    "vllm": "0.30.0",
+    "torch_npu": "2.10.0.post7",
+    "cann": "9.2.1",
+    "ascend_plugin": "activated",
+    "npu_count": 2
+  },
+  "verified_A_B": [
+    "/workspace/jev-adaptation/model-44/evidence/A-source-environment.json",
+    "/workspace/jev-adaptation/model-44/evidence/B-weight-manifest.json",
+    "/workspace/jev-adaptation/model-44/weights/ALL_SHA256_VERIFIED"
+  ],
+  "not_run": [
+    "D HTTP routes",
+    "E precision/probability",
+    "screenshots because native engine never initialized; no fake PNGs"
+  ],
+  "next_action": "release claim with truthful blocker and move to next unoccupied candidate after updating pool/CSV"
+}

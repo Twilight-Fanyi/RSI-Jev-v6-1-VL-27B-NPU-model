@@ -1,0 +1,31 @@
+{
+  "repo": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "files": [
+    {
+      "file": "tower.safetensors",
+      "sha256": "a56c5dba9ddd78fedc9694e4ea69161151117b411613559652e00f657c651855",
+      "size": 51249295504
+    },
+    {
+      "file": "visual.safetensors",
+      "sha256": "3c91804ce37b555c14181c78f8a4070b419ade68132bebe2cd753a2be56742f7",
+      "size": 921492896
+    },
+    {
+      "file": "scorer.safetensors",
+      "sha256": "a937caaa3d7fd867f8fce2d0928d91ffcdecf6db0cd10d514c7ee53466b66f55",
+      "size": 765629768
+    },
+    {
+      "file": "aux_scorers.safetensors",
+      "sha256": "318a3029dc78af39795198e3fa01c9f8cfbd563daa4c92bf5ec3cb27a608d4ef",
+      "size": 1531259664
+    },
+    {
+      "file": "calibration.safetensors",
+      "sha256": "9d29a1871b2262cb7b68d81883ec0188c891231e3ae1c28a9535f0e952185544",
+      "size": 349008
+    }
+  ]
+}

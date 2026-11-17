@@ -1,0 +1,18 @@
+{
+  "model_index": 44,
+  "checkpoint": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "runtime": {"vllm": "0.30.0", "vllm_ascend": "0.30.0", "cann": "9.2.1", "soc": "Ascend910", "dtype": "bfloat16", "tensor_parallel": 2},
+  "mapper": {
+    "embed_tokens.": "language_model.model.embed_tokens.",
+    "layers.": "language_model.model.layers.",
+    "norm.": "language_model.model.norm.",
+    "blocks.": "visual.blocks.",
+    "merger.": "visual.merger.",
+    "patch_embed.": "visual.patch_embed.",
+    "pos_embed.": "visual.pos_embed."
+  },
+  "probe": "C-probe4.log",
+  "result": "vLLM LLM constructor completed and printed LOADED; no parameter namespace error; NPU HBM peaked ~29.5 GiB per device during load and released after process exit.",
+  "remaining": "RSI-Jev scorer.safetensors and aux_scorers.safetensors are custom OptionScorer heads; stock vLLM endpoint exposes generation logits only and does not yet bind typed decision probabilities. No four-route decision service claimed."
+}

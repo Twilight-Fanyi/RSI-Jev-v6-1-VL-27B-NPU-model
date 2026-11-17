@@ -1,0 +1,10 @@
+# Checkpoint tensors stay outside this public adapter package.
+weights/
+*.safetensors
+*.bin
+*.ckpt
+
+# Local runtime/build noise.
+__pycache__/
+*.pyc
+.DS_Store

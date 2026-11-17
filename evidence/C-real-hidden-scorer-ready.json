@@ -1,0 +1,14 @@
+{
+  "model_id":44,
+  "checked_at":"2026-11-17T22:25:50+08:00",
+  "host":"openlibing-vllm8",
+  "runtime":"vLLM-Ascend TP1 generated hidden state + CPU scorer replay",
+  "hidden_source":"evidence/C-hidden-real.pt, captured from real NPU model forward for prompt_token_ids [0,0,0]",
+  "states_shape":[1,3,5120],
+  "option_span_contract":{"decision_index":[2],"option_span_start":[[0,1]],"option_span_end":[[1,3]],"option_mask":[[true,true]],"note":"synthetic two-option spans over the captured 3-token probe; real encoder wiring still pending"},
+  "scorer":{"main_logits":[[-0.7259790301322937,0.5699869990348816]],"main_probabilities":[[0.2148447036743164,0.7851552963256836]],"aux48_logits":[[-0.6243197321891785,0.6313228607177734]],"aux48_probabilities":[[0.22172491252422333,0.7782751321792603]],"finite":true,"probability_sums":[1.0,1.0]},
+  "evidence_log":"evidence/C-real-hidden-scorer.log",
+  "acceptance_status":"partial_real_hidden_scorer_replay",
+  "missing":["task JSON tokenizer/real option span encoder","aux56/exit64 calibration request path","HTTP /health /v1/decide/info /v1/systemone /v1/decide","precision comparison"],
+  "next_action":"wire encode_question output into vLLM request path and expose typed scorer outputs over four routes"
+}

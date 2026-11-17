@@ -1,0 +1,11 @@
+{
+  "model_id":44,
+  "comparison":"NPU vLLM-Ascend HTTP /v1/systemone vs CPU scorer replay on identical real tokenization/hidden capture",
+  "request":{"state":"The user says the file is missing.","instructions":"Does the user request keeping the file?","options":["yes","no"],"spans":[[21,31],[31,42]],"decision_index":44},
+  "npu_http_probabilities":[0.5154476761817932,0.4845523238182068],
+  "cpu_replay_probabilities":[0.5154476761817932,0.4845523238182068],
+  "absolute_differences":[0.0,0.0],
+  "max_absolute_difference":0.0,
+  "two_pp_gate":true,
+  "note":"CPU side replays the captured NPU hidden state through the same scorer/calibration weights; this validates scorer parity, not independent CPU tower inference. Official baseline precision remains pending."
+}

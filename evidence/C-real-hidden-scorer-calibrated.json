@@ -1,0 +1,15 @@
+{
+  "model_id":44,
+  "states_shape":[1,3,5120],
+  "decision_index":[2],
+  "spans":[[0,1],[1,3]],
+  "main_logT":0.05,
+  "main_calibrated_logits":[[-0.6905726194381714,0.5421884059906006]],
+  "main_calibrated_probabilities":[[0.2256985455751419,0.7743014097213745]],
+  "aux48_logT":0.01,
+  "aux48_calibrated_logits":[[-0.6181076169013977,0.6250410676002502]],
+  "aux48_calibrated_probabilities":[[0.22388838231563568,0.7761116027832031]],
+  "probability_sums":[0.9999999403953552,1.0],
+  "finite":true,
+  "note":"Real NPU hidden capture replay with synthetic two-option spans; calibration values read from calibration.json. Real task encoder and HTTP request path remain pending."
+}

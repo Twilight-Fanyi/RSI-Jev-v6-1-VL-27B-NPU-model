@@ -1,0 +1,148 @@
+# RSI-Jev on a Mac (MLX)
+
+## Install
+
+On an Apple Silicon Mac with macOS 14 or newer. Nothing else needs to be installed first:
+
+```bash
+curl -fsSL https://github.com/Shanghua-Gao/RSI-Jev/releases/latest/download/install.sh | sh
+```
+
+or `brew install shanghua-gao/tap/decideit`, or `pip install decideit` if you use Python. None of them installs
+PyTorch. The app is 84 MB; the model (1.7 GB) downloads the first time you use it, and images add
+0.2 GB the first time you send one.
+
+```bash
+echo 'The build failed on line 3.' | decide 'Did the build pass?' && echo yes || echo no
+```
+
+The model starts by itself and quits after 10 idle minutes, which gives its memory back
+(`RSIJEV_IDLE_MINUTES` changes that).
+
+## v7.0-VL 3B: about 2 GB
+
+A 4-bit build of [v7.0-VL 3B](https://huggingface.co/shgao/rsi-jev-v7.0-vl-3b), the first 20
+layers of the 4B. Same API, effort levels and calibration as the PyTorch release.
+
+| build | download | Decision Index 0.2.1, 16k sample | same answer as the bf16 release, on the Mac |
+|---|---|---|---|
+| [4-bit](https://huggingface.co/shgao/rsi-jev-v7.0-vl-3b-mlx-4bit) | 1.70 GB, + 0.21 GB for images | 58.50 | 96.5% (`low`), 97.5% (`medium`, `high`, `auto`) |
+| [bf16 release](https://huggingface.co/shgao/rsi-jev-v7.0-vl-3b) (reference) | 6.8 GB | 59.15 | – |
+
+The Decision Index reads use the 4-bit build's weights in PyTorch, on the same rows and GPU type
+as the bf16 read. Agreement is on 200 questions (180 text, 20 with images) run by MLX on an M2 Max;
+the 20 image questions all agree.
+
+To run a server yourself: `rsi-jev serve v7.0-vl-3b-mlx-4bit`.
+
+Measured on an M2 Max (34 GB) with `scripts/mac_check.sh`:
+
+| | 4-bit |
+|---|---|
+| one short question | 67–68 ms (`low`), 68–74 ms (`auto`), 83–84 ms (`medium`, `high`) |
+| the first `decide` after installing | 4 s |
+| `decide` after the model has gone idle | 0.8–1.8 s, with the model files in the disk cache |
+| memory for the weights | 1.7 GB, about 1.9 GB with images |
+| peak memory, 1k-token document | 3.05 GB, 1.4–2.3 s |
+| peak memory, 8k-token document | 3.59 GB, 13 s |
+| peak memory, 32k-token document | 5.54 GB, 52 s |
+
+| part | 4-bit build |
+|---|---|
+| decoder layers 1–20, every linear layer | 4-bit, groups of 32, GPTQ |
+| token embeddings | 2-bit, groups of 64, round to nearest |
+| vision tower | 4-bit, groups of 32 |
+| decision heads (layers 16, 20) | 8-bit, groups of 64, computed in fp32 |
+
+Inputs longer than 4,096 tokens run through each DeltaNet layer in 4,096-token pieces with the
+state carried over, which keeps the 32k case at 5.54 GB.
+
+MLX keeps freed memory for reuse, by default up to about its memory limit. The server lets it
+keep at most 1 GB (`RSIJEV_MLX_CACHE_GB`). `RSIJEV_MLX_MEMORY_GB` sets MLX's memory limit, which MLX
+treats as a guideline. `GET /v1/limits` reports `memory`: live arrays, freed memory kept, and
+the peak. For the model behind `decide`:
+`curl -s --unix-socket ~/.rsi-jev/model.sock localhost/v1/limits`.
+
+## v6.1-VL 4B
+
+RSI-Jev v6.1-VL 4B runs on Apple silicon through [MLX](https://github.com/ml-explore/mlx). There
+are two builds. Both have the same API, effort levels and image support as the PyTorch release;
+they store the weights in fewer bits.
+
+| build | download | decoder layers | same answer as the bf16 release, layers 16 / 20 / 32 | accuracy, layer 32 | Decision Index 0.2.1, 16k sample |
+|---|---|---|---|---|---|
+| **[8-bit](https://huggingface.co/shgao/rsi-jev-v6.1-vl-4b-mlx-8bit)** | 6.33 GB | 8-bit, round to nearest | 99.1 / 99.5 / 99.3% | 83.5% | 51.39 |
+| [4-bit](https://huggingface.co/shgao/rsi-jev-v6.1-vl-4b-mlx-4bit) | 3.87 GB | 4-bit, GPTQ | 97.1 / 97.9 / 97.9% | 83.3% | 50.99 |
+| [bf16 release](https://huggingface.co/shgao/rsi-jev-v6.1-vl-4b) (reference) | 9.68 GB | bf16 | – | 83.7% | 51.24 |
+
+Agreement and accuracy are on 2,200 evaluation questions run by MLX; the Decision Index reads
+are on the same rows and GPU type for all three. The 8-bit build gives the release's answers:
+its differences are at the level of rounding, on questions where the top two options nearly tie.
+The 4-bit build changes about one answer in fifty and costs about half a point of accuracy.
+**Pick 8-bit unless memory is tight.**
+
+## Install and run
+
+```bash
+pip install "rsi-jev[mlx,vision] @ git+https://github.com/Shanghua-Gao/RSI-Jev"
+rsi-jev serve v6.1-vl-4b-mlx-8bit --backend mlx          # or v6.1-vl-4b-mlx-4bit
+```
+
+The server speaks the same HTTP API as the PyTorch one ([`serve/README.md`](../serve/README.md)),
+images and `effort` included. From Python:
+
+```python
+from serve.decider import Decider
+d = Decider("v6.1-vl-4b-mlx-8bit", backend="mlx")
+d.decide("I was charged twice. Please refund.",
+         {"refund": {"type": "noul", "instructions": "Does the user request a refund?"}})
+```
+
+To build an MLX checkpoint from a release package yourself:
+
+```bash
+python scripts/convert_mlx.py v6.1-vl-4b out-8bit --bits 8 --group 64
+python scripts/mlx_verify.py out-8bit --pkg <the release directory>   # bit-exact check with MLX
+```
+
+## Speed and memory
+
+Not yet measured on Apple silicon; numbers will be added after a run of `scripts/mac_check.sh` (it prints median latency per effort, peak memory and agreement with the reference outputs). On MLX's CUDA backend the 8-bit build used about 7 GB at 1k input tokens, 12.7 GB at 8k and 26 GB at 32k.
+
+## What is quantized
+
+| part | 8-bit build | 4-bit build |
+|---|---|---|
+| decoder layers 1–32, every linear layer | 8-bit, groups of 64, round to nearest | 4-bit, groups of 32, GPTQ |
+| token embeddings | bf16 | 8-bit, groups of 64 |
+| vision tower | bf16 | bf16 |
+| decision heads (layers 16, 20, 32) | fp32 | bf16 weights, computed in fp32 |
+| per-exit temperatures, `auto` thresholds | as released | as released |
+
+The 4-bit codes come from GPTQ ([Frantar et al., 2022](https://arxiv.org/abs/2210.17323)) in
+MLX's affine format. The vision tower stays bf16 in both: 4 bits there costs about 7 points of
+image agreement for 0.5 GB.
+
+## How the builds were checked
+
+- **The stored weights are the measured ones.** The 8-bit codes, scales and biases equal
+  `mx.quantize` of the release's bf16 weights, bit for bit. The 4-bit build stores precomputed
+  GPTQ codes as they are; MLX's `mx.dequantize` of every matrix equals the weights the quality
+  numbers were measured with, bit for bit (`scripts/mlx_verify.py`).
+- **MLX itself.** Each build was loaded with the MLX backend on Linux and run on the 2,200
+  evaluation questions (text, a 151-option intent set, 300 image questions) and 300 held-out
+  questions, against the bf16 release served by PyTorch.
+- **The served paths.** `low`, `medium` and `high` answer at layers 16, 20 and 32; `auto` stops
+  where the offline cascade stops. `rsi-jev serve --backend mlx` answered text and image
+  requests.
+- **Apple silicon.** `scripts/mac_check.sh` runs 200 questions per effort on the Mac and compares
+  the answers with the bf16 release and with the same build run by MLX on Linux.
+
+## Limitations
+
+- Image requests use the PyTorch release's image processor when `torchvision` is installed
+  (`rsi-jev[vision]`); without it, a PIL resize is used and pixels differ slightly.
+- On image questions MLX and PyTorch differ a little more than on text (mean probability
+  difference 0.008 against 0.004), in both builds and in the unquantized one: the vision tower's
+  arithmetic differs between the two frameworks.
+- Questions with images always run all 32 layers, as in the PyTorch release.

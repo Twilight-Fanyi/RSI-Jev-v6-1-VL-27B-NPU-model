@@ -1,0 +1,34 @@
+{
+  "model_id": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "checked_at": "2026-11-17T21:48:11+08:00",
+  "host": "openlibing-vllm8",
+  "runtime": "vLLM 0.30.0 + vLLM-Ascend (CANN 9.2.1), Ascend910",
+  "attempt": {
+    "device": "chip1",
+    "tensor_parallel_size": 1,
+    "dtype": "bfloat16",
+    "max_model_len": 128,
+    "enforce_eager": true
+  },
+  "native_forward_progress": "reached model forward in prior TP1 probe",
+  "compatibility_fix": {
+    "next_power_of_2": "sitecustomize patches vllm.triton_utils.triton placeholder",
+    "layernorm": "sitecustomize supplies torch fallback for vllm_ascend.ops.triton.layernorm_gated.layer_norm_fwd_npu when Triton driver is unavailable",
+    "sitecustomize_sha256": "6ad54657c03b25a81dd88ba313b11017ca442a549033822a777b8cd241e4db01"
+  },
+  "latest_probe": {
+    "status": "blocked_resource_before_model_init",
+    "log": "evidence/C-single-chip1-fallback.log",
+    "log_sha256": "4e49381e9f3858a9838f144eb53ec7974a5862ef21f4ab4a2fd4ee5d4b6daa5d",
+    "error": "ValueError: Free memory on device (48.54/61.28 GiB) on startup is less than desired GPU memory utilization (0.9, 55.15 GiB).",
+    "competing_process": "model-139/probe.py PID 331603 with child 331980 on chip1; approximately 12.9 GiB HBM",
+    "npu_hbm": "chip1 15773/65536 MB at 21:48"
+  },
+  "previous_forward_error_log": "evidence/C-single-chip1-rerun.log",
+  "previous_forward_error_sha256": "43e50beade7f8630e63a9de6ce797bde3948ca4f59c0196c7b71b5a192217566",
+  "scorer_status": "scorer.safetensors and aux_scorers mapped; hidden-state/option-span adapter passes synthetic finite masked probability smoke",
+  "acceptance_status": "pending",
+  "blocker": "chip1 resource occupied by model-139; no four-route HTTP or precision evidence; do not mark complete",
+  "next_action": "wait for chip1 >= 55.2 GiB free, rerun TP1 with compatibility shim, then bind hidden-state capture to request path"
+}

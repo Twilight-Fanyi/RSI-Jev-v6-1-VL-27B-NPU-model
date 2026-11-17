@@ -1,0 +1,20 @@
+{
+ "cal_mode": "temp",
+ "exits": {
+  "48": {
+   "cal_mode": "temp",
+   "logT": 0.01
+  },
+  "56": {
+   "cal_mode": "temp",
+   "logT": 0.02
+  }
+ },
+ "main_logT": 0.05,
+ "T": {
+  "48": 1.0101,
+  "56": 1.0202,
+  "64": 1.0513
+ },
+ "fit": "per exit: EVAL-type-weighted NLL grid on POLICY-DEV v1 half A (q27mx1 policy27.py)"
+}

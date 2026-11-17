@@ -1,0 +1,42 @@
+{
+  "model_id": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "checked_at": "2026-11-17T22:03:40+08:00",
+  "host": "openlibing-vllm8",
+  "runtime": "vLLM 0.30.0 + vLLM-Ascend (CANN 9.2.1), Ascend910",
+  "device": "chip1",
+  "tensor_parallel_size": 1,
+  "dtype": "bfloat16",
+  "max_model_len": 128,
+  "gpu_memory_utilization": 0.9,
+  "native_loader_status": "SINGLE_LOADED",
+  "forward_profile": "passed vLLM dummy/profile run; KV cache initialized",
+  "kv_cache": "0.72 GiB, 237 tokens, 1.86x max concurrency for 128-token request",
+  "weights_loaded": "51.0866 GiB",
+  "compatibility": {
+    "triton_npu_compiler_path": "/usr/local/Ascend/cann-9.2.1/tools/bisheng_compiler/bin/bisheng",
+    "triton_active": true,
+    "next_power_of_2_shim": "conditional vllm.triton_utils fallback; full Triton API active on final run",
+    "launcher_sha256": "fddbbe23d3aaccdff811c4fa04882fa4d2642f0672482f0be439f628a7c7e7ef",
+    "sitecustomize_sha256": "508838968afdc636a0f3b4b1a835d7af9f0de12483408f1f982a94cb625b526a"
+  },
+  "evidence": {
+    "log": "evidence/C-single-chip1-triton.log",
+    "log_sha256": "ab480544bac4c854cd8d357e313d19e70603bd8bd444e9768fd85b5ecc9f1817",
+    "markers": [
+      "Triton backend active (VLLM_TRITON_PATCH module True)",
+      "Loading model weights took 51.0866 GB",
+      "Available KV cache memory: 0.72 GiB",
+      "init engine (profile, create kv cache, warmup model)",
+      "SINGLE_LOADED"
+    ]
+  },
+  "scorer_status": "scorer.safetensors and aux_scorers mapped; hidden-state/option-span adapter passes synthetic finite masked probability smoke",
+  "acceptance_status": "pending",
+  "missing_acceptance": [
+    "HTTP server /health, /v1/decide/info, /v1/systemone, /v1/decide",
+    "real option-span tokenization and hidden-state capture bound to request path",
+    "complete probability/precision comparison"
+  ],
+  "next_action": "add request-path hidden-state capture + option-span encoder; run four routes and precision on real task examples before submission"
+}

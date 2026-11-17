@@ -1,0 +1,400 @@
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+TRITON_PATCH /usr/local/python3.12.16/lib/python3.12/site-packages/triton/__init__.py True
+INFO 11-17 21:45:36 [__init__.py:52] Available plugins for group vllm.platform_plugins:
+INFO 11-17 21:45:36 [__init__.py:54] - ascend -> vllm_ascend:register
+INFO 11-17 21:45:36 [__init__.py:57] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 11-17 21:45:36 [__init__.py:272] Platform plugin ascend is activated
+INFO 11-17 21:45:36 [platform.py:74] Breakable CUDAGraph on Ascend is opt-in; using VLLM_USE_BREAKABLE_CUDAGRAPH=0.
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/backends/ascend/driver.py:268: UserWarning: [31;20mCouldn't find executable bisheng or TRITON_NPU_COMPILER_PATH[0m
+  warnings.warn(red + str(e_npucompiler) + reset)
+INFO 11-17 21:45:41 [importing.py:74] Triton is installed but 0 active driver(s) found (expected 1). Disabling Triton to prevent runtime errors.
+INFO 11-17 21:45:41 [importing.py:98] Triton not installed or not compatible; certain GPU-related functions will not be available.
+PATCH_OK Qwen3_5ForConditionalGeneration {'model.visual.': 'visual.', 'lm_head.': 'language_model.lm_head.', 'model.language_model.': 'language_model.model.', 'mtp.': None, 'embed_tokens.': 'language_model.model.embed_tokens.', 'layers.': 'language_model.model.layers.', 'norm.': 'language_model.model.norm.', 'blocks.': 'visual.blocks.', 'merger.': 'visual.merger.', 'patch_embed.': 'visual.patch_embed.', 'pos_embed.': 'visual.pos_embed.'}
+PATCH_OK AscendQwen3_5ForConditionalGeneration {'model.visual.': 'visual.', 'lm_head.': 'language_model.lm_head.', 'model.language_model.': 'language_model.model.', 'mtp.': None, 'embed_tokens.': 'language_model.model.embed_tokens.', 'layers.': 'language_model.model.layers.', 'norm.': 'language_model.model.norm.', 'blocks.': 'visual.blocks.', 'merger.': 'visual.merger.', 'patch_embed.': 'visual.patch_embed.', 'pos_embed.': 'visual.pos_embed.'}
+VLLM_TRITON_PATCH TritonPlaceholder True
+INFO 11-17 21:45:44 [patch_indexer_kv_dtype.py:102] Patched AttentionConfig.indexer_kv_dtype to accept 'int8' (DeepSeek V4 Ascend indexer K cache dtype).
+INFO 11-17 21:45:44 [patch_kv_cache_dtype.py:117] Patched CacheConfig.cache_dtype to accept 'int8' and 'mxfp8' (Ascend KV cache dtypes).
+INFO 11-17 21:45:44 [__init__.py:112] Registered model loader `<class 'vllm_ascend.model_loader.netloader.netloader.ModelNetLoaderElastic'>` with load format `netloader`
+INFO 11-17 21:45:44 [__init__.py:112] Registered model loader `<class 'vllm_ascend.model_loader.rfork.rfork_loader.RForkModelLoader'>` with load format `rfork`
+INFO 11-17 21:45:44 [api_utils.py:286] non-default args: {'tokenizer': '/workspace/jev-adaptation/model-44/source-audit', 'trust_remote_code': True, 'dtype': 'bfloat16', 'max_model_len': 128, 'eplb_config': EPLBConfig(window_size=1000, step_interval=3000, num_redundant_experts=0, log_balancedness=False, log_balancedness_interval=1, use_async=True, policy='default', communicator=None), 'gpu_memory_utilization': 0.9, 'max_num_seqs': 1, 'disable_log_stats': True, 'enforce_eager': True, 'model': '/workspace/jev-adaptation/model-44/vllm-base-probe'}
+WARNING 11-17 21:45:44 [indexer_topk.py:29] Failed to import the DeepSelect extension (vllm._deepselect_C): No module named 'vllm._deepselect_C'
+INFO 11-17 21:45:44 [model.py:692] Resolved architecture: Qwen3_5ForConditionalGeneration
+INFO 11-17 21:45:44 [model.py:2030] Using max model len 128
+INFO 11-17 21:45:44 [scheduler.py:288] Chunked prefill is enabled with max_num_batched_tokens=128.
+INFO 11-17 21:45:44 [config.py:625] Mamba cache mode is set to 'align' for Qwen3_5ForConditionalGeneration by default when prefix caching is enabled
+WARNING 11-17 21:45:44 [vllm.py:1547] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 11-17 21:45:44 [vllm.py:1570] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 11-17 21:45:44 [kernel.py:416] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['native'])
+INFO 11-17 21:45:44 [vllm.py:1780] Cudagraph is disabled under eager mode
+INFO 11-17 21:45:44 [utils.py:225] No quantization signature detected from model files for "/workspace/jev-adaptation/model-44/vllm-base-probe". The model will be loaded as float. To force a quantization method, pass "--quantization <method>" explicitly.
+WARNING 11-17 21:45:44 [platform.py:731] GPU-specific parameter is not supported on Ascend. parameter=disable_cascade_attn, value=True, action: resetting to False.
+INFO 11-17 21:45:44 [ascend_config.py:332] Dynamic EPLB is False
+INFO 11-17 21:45:44 [ascend_config.py:333] The number of redundant experts is 0
+INFO 11-17 21:45:44 [ascend_config.py:769] FlashComm1 is disabled. Using flashinfer_all2allv as the all2all backend.
+INFO 11-17 21:45:44 [platform.py:1219] Compilation disabled, using eager mode by default
+INFO 11-17 21:45:44 [platform.py:1464] Set PYTORCH_NPU_ALLOC_CONF=expandable_segments:True
+INFO 11-17 21:45:44 [compilation.py:336] Enabled custom fusions: norm_quant, act_quant
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+TRITON_PATCH /usr/local/python3.12.16/lib/python3.12/site-packages/triton/__init__.py True
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+TRITON_PATCH /usr/local/python3.12.16/lib/python3.12/site-packages/triton/__init__.py True
+WARNING 11-17 21:45:45 [base.py:284] Multi-modal warmup failed
+WARNING 11-17 21:45:46 [base.py:296] Readonly multi-modal warmup failed
+INFO 11-17 21:45:48 [__init__.py:52] Available plugins for group vllm.platform_plugins:
+INFO 11-17 21:45:48 [__init__.py:54] - ascend -> vllm_ascend:register
+INFO 11-17 21:45:48 [__init__.py:57] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 11-17 21:45:48 [__init__.py:272] Platform plugin ascend is activated
+INFO 11-17 21:45:48 [__init__.py:52] Available plugins for group vllm.platform_plugins:
+INFO 11-17 21:45:48 [__init__.py:54] - ascend -> vllm_ascend:register
+INFO 11-17 21:45:48 [__init__.py:57] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 11-17 21:45:48 [__init__.py:272] Platform plugin ascend is activated
+INFO 11-17 21:45:48 [platform.py:74] Breakable CUDAGraph on Ascend is opt-in; using VLLM_USE_BREAKABLE_CUDAGRAPH=0.
+INFO 11-17 21:45:49 [platform.py:74] Breakable CUDAGraph on Ascend is opt-in; using VLLM_USE_BREAKABLE_CUDAGRAPH=0.
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/backends/ascend/driver.py:268: UserWarning: [31;20mCouldn't find executable bisheng or TRITON_NPU_COMPILER_PATH[0m
+  warnings.warn(red + str(e_npucompiler) + reset)
+INFO 11-17 21:45:53 [importing.py:74] Triton is installed but 0 active driver(s) found (expected 1). Disabling Triton to prevent runtime errors.
+INFO 11-17 21:45:53 [importing.py:98] Triton not installed or not compatible; certain GPU-related functions will not be available.
+/usr/local/python3.12.16/lib/python3.12/site-packages/triton/backends/ascend/driver.py:268: UserWarning: [31;20mCouldn't find executable bisheng or TRITON_NPU_COMPILER_PATH[0m
+  warnings.warn(red + str(e_npucompiler) + reset)
+INFO 11-17 21:45:54 [importing.py:74] Triton is installed but 0 active driver(s) found (expected 1). Disabling Triton to prevent runtime errors.
+INFO 11-17 21:45:54 [importing.py:98] Triton not installed or not compatible; certain GPU-related functions will not be available.
+PATCH_OK Qwen3_5ForConditionalGeneration {'model.visual.': 'visual.', 'lm_head.': 'language_model.lm_head.', 'model.language_model.': 'language_model.model.', 'mtp.': None, 'embed_tokens.': 'language_model.model.embed_tokens.', 'layers.': 'language_model.model.layers.', 'norm.': 'language_model.model.norm.', 'blocks.': 'visual.blocks.', 'merger.': 'visual.merger.', 'patch_embed.': 'visual.patch_embed.', 'pos_embed.': 'visual.pos_embed.'}
+PATCH_OK AscendQwen3_5ForConditionalGeneration {'model.visual.': 'visual.', 'lm_head.': 'language_model.lm_head.', 'model.language_model.': 'language_model.model.', 'mtp.': None, 'embed_tokens.': 'language_model.model.embed_tokens.', 'layers.': 'language_model.model.layers.', 'norm.': 'language_model.model.norm.', 'blocks.': 'visual.blocks.', 'merger.': 'visual.merger.', 'patch_embed.': 'visual.patch_embed.', 'pos_embed.': 'visual.pos_embed.'}
+VLLM_TRITON_PATCH TritonPlaceholder True
+INFO 11-17 21:45:56 [patch_indexer_kv_dtype.py:102] Patched AttentionConfig.indexer_kv_dtype to accept 'int8' (DeepSeek V4 Ascend indexer K cache dtype).
+INFO 11-17 21:45:56 [patch_kv_cache_dtype.py:117] Patched CacheConfig.cache_dtype to accept 'int8' and 'mxfp8' (Ascend KV cache dtypes).
+INFO 11-17 21:45:56 [ascend_config.py:332] Dynamic EPLB is False
+INFO 11-17 21:45:56 [ascend_config.py:333] The number of redundant experts is 0
+INFO 11-17 21:45:56 [ascend_config.py:769] FlashComm1 is disabled. Using flashinfer_all2allv as the all2all backend.
+(EngineCore pid=329485) INFO 11-17 21:45:56 [__init__.py:112] Registered model loader `<class 'vllm_ascend.model_loader.netloader.netloader.ModelNetLoaderElastic'>` with load format `netloader`
+(EngineCore pid=329485) INFO 11-17 21:45:56 [__init__.py:112] Registered model loader `<class 'vllm_ascend.model_loader.rfork.rfork_loader.RForkModelLoader'>` with load format `rfork`
+(EngineCore pid=329485) INFO 11-17 21:45:56 [core.py:123] Initializing a V1 LLM engine (v0.30.0) with config: model='/workspace/jev-adaptation/model-44/vllm-base-probe', speculative_config=None, tokenizer='/workspace/jev-adaptation/model-44/source-audit', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=128, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=True, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=npu, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=/workspace/jev-adaptation/model-44/vllm-base-probe, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'vllm_ascend.compilation.compiler_interface.AscendCompiler', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [128], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, moe_backend='auto', sparse_indexer_topk_backend='auto', linear_backend='auto', linear_backend_per_quant=None)
+PATCH_OK Qwen3_5ForConditionalGeneration {'model.visual.': 'visual.', 'lm_head.': 'language_model.lm_head.', 'model.language_model.': 'language_model.model.', 'mtp.': None, 'embed_tokens.': 'language_model.model.embed_tokens.', 'layers.': 'language_model.model.layers.', 'norm.': 'language_model.model.norm.', 'blocks.': 'visual.blocks.', 'merger.': 'visual.merger.', 'patch_embed.': 'visual.patch_embed.', 'pos_embed.': 'visual.pos_embed.'}
+PATCH_OK AscendQwen3_5ForConditionalGeneration {'model.visual.': 'visual.', 'lm_head.': 'language_model.lm_head.', 'model.language_model.': 'language_model.model.', 'mtp.': None, 'embed_tokens.': 'language_model.model.embed_tokens.', 'layers.': 'language_model.model.layers.', 'norm.': 'language_model.model.norm.', 'blocks.': 'visual.blocks.', 'merger.': 'visual.merger.', 'patch_embed.': 'visual.patch_embed.', 'pos_embed.': 'visual.pos_embed.'}
+VLLM_TRITON_PATCH TritonPlaceholder True
+(EngineCore pid=329485) WARNING 11-17 21:45:56 [indexer_topk.py:29] Failed to import the DeepSelect extension (vllm._deepselect_C): No module named 'vllm._deepselect_C'
+(EngineCore pid=329485) INFO 11-17 21:45:58 [parallel_state.py:1827] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_6c5cc4af484344979ba0145ae5469c61 backend=hccl
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+(EngineCore pid=329485) INFO 11-17 21:45:58 [parallel_state.py:2267] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[rank0]:[W1117 21:45:58.147259380 NPUCachingAllocator.cpp:204] Warning: The current CANN and HDK(driver) versions require processing for 32 padding size, with memory allocation. (function operator())
+(EngineCore pid=329485) [transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+(EngineCore pid=329485) INFO 11-17 21:45:58 [platform.py:1487] FA3 will not be enabled when rl_config.enable_training_consistency is false. Note that Ascend NPU will use its registered plugin backend instead.
+(EngineCore pid=329485) INFO 11-17 21:45:59 [model_runner_v1.py:4389] Starting to load model /workspace/jev-adaptation/model-44/vllm-base-probe...
+(EngineCore pid=329485) INFO 11-17 21:45:59 [interface.py:414] Using default backend AttentionBackendEnum.TORCH_SDPA for vit attention
+(EngineCore pid=329485) INFO 11-17 21:45:59 [mm_encoder_attention.py:372] Using AttentionBackendEnum.TORCH_SDPA for MMEncoderAttention.
+(EngineCore pid=329485) INFO 11-17 21:45:59 [qwen_gdn_linear_attn.py:176] Using Triton/FLA GDN prefill kernel (requested=auto, head_k_dim=128).
+(EngineCore pid=329485) INFO 11-17 21:45:59 [qwen_gdn_linear_attn.py:528] GDN decode kernel: cuda
+(EngineCore pid=329485) INFO 11-17 21:45:59 [platform.py:1487] FA3 will not be enabled when rl_config.enable_training_consistency is false. Note that Ascend NPU will use its registered plugin backend instead.
+(EngineCore pid=329485) INFO 11-17 21:46:02 [weight_utils.py:895] Filesystem type for checkpoints: OVERLAY. Checkpoint size: 48.59 GiB. Available RAM: 0.00 GiB.
+(EngineCore pid=329485) INFO 11-17 21:46:02 [weight_utils.py:925] Auto-prefetch is disabled because the filesystem (OVERLAY) is not a recognized network FS (NFS/Lustre) and the checkpoint size (48.59 GiB) exceeds 90% of available RAM (0.00 GiB).
+(EngineCore pid=329485) Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+(EngineCore pid=329485) Exception in thread Thread-1 (_report_usage_worker):
+(EngineCore pid=329485) Traceback (most recent call last):
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+(EngineCore pid=329485)     self.run()
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/threading.py", line 1012, in run
+(EngineCore pid=329485)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/usage/usage_lib.py", line 172, in _report_usage_worker
+(EngineCore pid=329485)     self._report_usage_once(model_architecture, usage_context, extra_kvs)
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/usage/usage_lib.py", line 216, in _report_usage_once
+(EngineCore pid=329485)     info = cpuinfo.get_cpu_info()
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/cpuinfo/cpuinfo.py", line 2762, in get_cpu_info
+(EngineCore pid=329485)     output = json.loads(output, object_hook = _utf_to_str)
+(EngineCore pid=329485)              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/json/__init__.py", line 359, in loads
+(EngineCore pid=329485)     return cls(**kw).decode(s)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/json/decoder.py", line 338, in decode
+(EngineCore pid=329485)     obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+(EngineCore pid=329485)                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/json/decoder.py", line 356, in raw_decode
+(EngineCore pid=329485)     raise JSONDecodeError("Expecting value", s, err.value) from None
+(EngineCore pid=329485) json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+(EngineCore pid=329485) Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:11<00:11, 11.80s/it]
+(EngineCore pid=329485) Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:14<00:00,  6.64s/it]
+(EngineCore pid=329485) Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:14<00:00,  7.41s/it]
+(EngineCore pid=329485) 
+(EngineCore pid=329485) INFO 11-17 21:46:17 [default_loader.py:430] Loading weights took 14.92 seconds
+(EngineCore pid=329485) INFO 11-17 21:46:18 [model_runner_v1.py:4476] Loading model weights took 51.0866 GB
+(EngineCore pid=329485) INFO 11-17 21:46:18 [model_runner_v1.py:4563] Model runner load_model total time: 19.88 seconds
+(EngineCore pid=329485) INFO 11-17 21:46:18 [interface.py:635] Setting kv cache block size to 128 for CUSTOM backend.
+(EngineCore pid=329485) INFO 11-17 21:46:18 [interface.py:933] Setting attention block size to 896 tokens to ensure that attention page size is >= mamba page size.
+(EngineCore pid=329485) INFO 11-17 21:46:18 [interface.py:957] Padding mamba page size by 14.43% to ensure that mamba page size and attention page size are exactly equal.
+(EngineCore pid=329485) INFO 11-17 21:46:18 [utils.py:320] Using LBNHC KV cache layout.
+(EngineCore pid=329485) INFO 11-17 21:46:19 [gpu_model_runner.py:6496] Encoder cache will be initialized with a budget of 16384 tokens, and profiled with 1 image items of the maximum feature size.
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366] EngineCore failed to start.
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366] Traceback (most recent call last):
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 1328, in run_engine_core
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return func(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 1085, in __init__
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     super().__init__(
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_profiling_chunk.py", line 198, in _patched_engine_core_init
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     original_init(self, *args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 145, in __init__
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return func(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 308, in _initialize_kv_caches
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     available_gpu_memory = self.model_executor.determine_available_memory()
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/executor/abstract.py", line 149, in determine_available_memory
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self.collective_rpc("determine_available_memory")
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return func(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return func(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/worker.py", line 605, in determine_available_memory
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     self.model_runner.profile_run()
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/model_runner_v1.py", line 4344, in profile_run
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     super().profile_run()
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/v1/worker/gpu_model_runner.py", line 6524, in profile_run
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     hidden_states, last_hidden_states = self._dummy_run(
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                                         ^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return func(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/model_runner_v1.py", line 4270, in _dummy_run
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     outputs = self._model_forward(
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]               ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/model_runner_v1.py", line 3249, in _model_forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     hidden_states = run_model()
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                     ^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return forward_call(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/model_executor/models/qwen3_5.py", line 591, in forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     hidden_states = self.language_model.model(
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/compilation/decorators.py", line 509, in __call__
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self.forward(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/model_executor/models/qwen3_next.py", line 716, in forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     hidden_states, residual = layer(
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                               ^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return forward_call(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/patch/worker/patch_qwen3_5.py", line 158, in forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     hidden_states = self.linear_attn(hidden_states=hidden_states)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return forward_call(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/gdn.py", line 444, in forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     core_attn_out = self.norm(core_attn_out, z)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return forward_call(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm/vllm/model_executor/custom_op.py", line 136, in forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return self._forward_method(*args, **kwargs)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/layernorm.py", line 213, in forward_oot
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return LayerNormFn.apply(x, self.weight, self.bias, z, self.eps, self.group_size, self.norm_before_gate, True)
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/autograd/function.py", line 583, in apply
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     return super().apply(*args, **kwargs)  # type: ignore[misc]
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/layernorm.py", line 155, in forward
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     y, mean, rstd = layer_norm_fwd_npu(
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]                     ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/triton/layernorm_gated.py", line 148, in layer_norm_fwd_npu
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     _layer_norm_fwd_1pass_kernel_npu[grid](
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+(EngineCore pid=329485) ERROR 11-17 21:46:28 [core.py:1366] TypeError: 'function' object is not subscriptable
+(EngineCore pid=329485) Process EngineCore:
+(EngineCore pid=329485) Traceback (most recent call last):
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=329485)     self.run()
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/multiprocessing/process.py", line 108, in run
+(EngineCore pid=329485)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_engine_core.py", line 56, in _run_engine_core_patch_func
+(EngineCore pid=329485)     return _OriginalRunEngineCore(*args, dp_rank=dp_rank, local_dp_rank=local_dp_rank, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 1370, in run_engine_core
+(EngineCore pid=329485)     raise e
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 1328, in run_engine_core
+(EngineCore pid=329485)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=329485)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=329485)     return func(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 1085, in __init__
+(EngineCore pid=329485)     super().__init__(
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_profiling_chunk.py", line 198, in _patched_engine_core_init
+(EngineCore pid=329485)     original_init(self, *args, **kwargs)
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 145, in __init__
+(EngineCore pid=329485)     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=329485)                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=329485)     return func(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/engine/core.py", line 308, in _initialize_kv_caches
+(EngineCore pid=329485)     available_gpu_memory = self.model_executor.determine_available_memory()
+(EngineCore pid=329485)                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/executor/abstract.py", line 149, in determine_available_memory
+(EngineCore pid=329485)     return self.collective_rpc("determine_available_memory")
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
+(EngineCore pid=329485)     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=329485)              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=329485)     return func(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=329485)     return func(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/worker.py", line 605, in determine_available_memory
+(EngineCore pid=329485)     self.model_runner.profile_run()
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/model_runner_v1.py", line 4344, in profile_run
+(EngineCore pid=329485)     super().profile_run()
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/v1/worker/gpu_model_runner.py", line 6524, in profile_run
+(EngineCore pid=329485)     hidden_states, last_hidden_states = self._dummy_run(
+(EngineCore pid=329485)                                         ^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=329485)     return func(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/model_runner_v1.py", line 4270, in _dummy_run
+(EngineCore pid=329485)     outputs = self._model_forward(
+(EngineCore pid=329485)               ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/model_runner_v1.py", line 3249, in _model_forward
+(EngineCore pid=329485)     hidden_states = run_model()
+(EngineCore pid=329485)                     ^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485)     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485)     return forward_call(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/model_executor/models/qwen3_5.py", line 591, in forward
+(EngineCore pid=329485)     hidden_states = self.language_model.model(
+(EngineCore pid=329485)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/compilation/decorators.py", line 509, in __call__
+(EngineCore pid=329485)     return self.forward(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/model_executor/models/qwen3_next.py", line 716, in forward
+(EngineCore pid=329485)     hidden_states, residual = layer(
+(EngineCore pid=329485)                               ^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485)     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485)     return forward_call(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/patch/worker/patch_qwen3_5.py", line 158, in forward
+(EngineCore pid=329485)     hidden_states = self.linear_attn(hidden_states=hidden_states)
+(EngineCore pid=329485)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485)     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485)     return forward_call(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/gdn.py", line 444, in forward
+(EngineCore pid=329485)     core_attn_out = self.norm(core_attn_out, z)
+(EngineCore pid=329485)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+(EngineCore pid=329485)     return self._call_impl(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+(EngineCore pid=329485)     return forward_call(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm/vllm/model_executor/custom_op.py", line 136, in forward
+(EngineCore pid=329485)     return self._forward_method(*args, **kwargs)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/layernorm.py", line 213, in forward_oot
+(EngineCore pid=329485)     return LayerNormFn.apply(x, self.weight, self.bias, z, self.eps, self.group_size, self.norm_before_gate, True)
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/usr/local/python3.12.16/lib/python3.12/site-packages/torch/autograd/function.py", line 583, in apply
+(EngineCore pid=329485)     return super().apply(*args, **kwargs)  # type: ignore[misc]
+(EngineCore pid=329485)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/layernorm.py", line 155, in forward
+(EngineCore pid=329485)     y, mean, rstd = layer_norm_fwd_npu(
+(EngineCore pid=329485)                     ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=329485)   File "/vllm-workspace/vllm-ascend/vllm_ascend/ops/triton/layernorm_gated.py", line 148, in layer_norm_fwd_npu
+(EngineCore pid=329485)     _layer_norm_fwd_1pass_kernel_npu[grid](
+(EngineCore pid=329485)     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+(EngineCore pid=329485) TypeError: 'function' object is not subscriptable
+INFO 11-17 21:46:34 [utils.py:632] [shutdown] Process manager: send sigterm to process EngineCore
+Traceback (most recent call last):
+  File "/workspace/jev-adaptation/model-44/vllm-base-probe/probe-single.py", line 6, in <module>
+    if __name__ == "__main__": main()
+                               ^^^^^^
+  File "/workspace/jev-adaptation/model-44/vllm-base-probe/probe-single.py", line 4, in main
+    m=LLM(model="/workspace/jev-adaptation/model-44/vllm-base-probe",tokenizer="/workspace/jev-adaptation/model-44/source-audit",trust_remote_code=True,tensor_parallel_size=1,dtype="bfloat16",max_model_len=128,max_num_seqs=1,enforce_eager=True,gpu_memory_utilization=0.90)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vllm-workspace/vllm/vllm/entrypoints/llm.py", line 343, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vllm-workspace/vllm/vllm/v1/engine/llm_engine.py", line 184, in from_engine_args
+    return cls(
+           ^^^^
+  File "/vllm-workspace/vllm/vllm/v1/engine/llm_engine.py", line 109, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vllm-workspace/vllm/vllm/v1/engine/core_client.py", line 122, in make_client
+    return SyncMPClient(
+           ^^^^^^^^^^^^^
+  File "/vllm-workspace/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/vllm-workspace/vllm/vllm/v1/engine/core_client.py", line 880, in __init__
+    super().__init__(
+  File "/vllm-workspace/vllm/vllm/v1/engine/core_client.py", line 656, in __init__
+    with launch_core_engines(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.12.16/lib/python3.12/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/vllm-workspace/vllm/vllm/v1/engine/utils.py", line 1240, in launch_core_engines
+    wait_for_engine_startup(
+  File "/vllm-workspace/vllm/vllm/v1/engine/utils.py", line 1320, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+[ERROR] 2026-11-17-21:46:34 (PID:329041, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception

@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="RSI-Jev: Jev-style System One decision models, built by AI research agents. Every release and every failed experiment is published. v7.0-VL 4B reads the options in a new way: 60.63 on the public Decision Index 0.3, up from 50.98.">
+<title>RSI-Jev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* One story, one idea per screen. Dark is the base palette; light is a full counterpart. */
+:root {
+  --bg: #000;
+  --panel: #111113;
+  --raise: #1c1c1e;
+  --ink: #f5f5f7;
+  --ink-2: #d2d2d7;
+  --muted: #a1a1a6;
+  --line: rgba(255, 255, 255, .12);
+  --accent: #2997ff;
+  --track: #2a2a2d;
+  --base: #5a5a60;
+  --bad: #ff6b5e;
+  --good: #64d2ff;
+  --ok: #30d158;
+  --head-bg: rgba(0, 0, 0, .72);
+  --display: "Inter Tight", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* type scale */
+  --t-display: clamp(40px, 6.6vw, 80px);
+  --t-h2: clamp(30px, 4.2vw, 48px);
+  --t-h3: clamp(22px, 2.3vw, 28px);
+  --t-sub: clamp(18px, 1.7vw, 21px);
+  --t-body: 17px;
+  --t-cap: 13px;
+  /* spacing scale */
+  --s1: 8px; --s2: 16px; --s3: 24px; --s4: 40px; --s5: 64px; --s6: 136px;
+  --r: 24px; --r-sm: 14px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #fff; --panel: #f5f5f7; --raise: #e8e8ed; --ink: #1d1d1f; --ink-2: #424245; --muted: #6e6e73; --line: rgba(0, 0, 0, .1);
+    --accent: #0071e3; --track: #e1e1e6; --base: #aeaeb2; --bad: #d70015; --good: #0a7ea4; --ok: #248a3d; --head-bg: rgba(255, 255, 255, .78);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #fff; --panel: #f5f5f7; --raise: #e8e8ed; --ink: #1d1d1f; --ink-2: #424245; --muted: #6e6e73; --line: rgba(0, 0, 0, .1);
+  --accent: #0071e3; --track: #e1e1e6; --base: #aeaeb2; --bad: #d70015; --good: #0a7ea4; --ok: #248a3d; --head-bg: rgba(255, 255, 255, .78);
+  color-scheme: light;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 64px; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: var(--t-body)/1.5 var(--body); letter-spacing: -0.01em; overflow-x: clip; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+code { font-family: var(--mono); font-size: .88em; }
+img, video { max-width: 100%; }
+
+/* header */
+header.top { position: sticky; top: 0; z-index: 50; background: var(--head-bg); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); min-height: 52px; }
+.brand { font: 600 18px/1 var(--display); letter-spacing: -0.02em; color: var(--ink); }
+.brand:hover { text-decoration: none; }
+nav.links { display: flex; align-items: center; gap: var(--s3); font-size: 13px; }
+nav.links a { color: var(--ink-2); }
+nav.links a:hover { color: var(--ink); text-decoration: none; }
+.theme { font: 500 13px/1 var(--body); width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink-2); cursor: pointer; }
+
+/* screens */
+section { padding-block: var(--s6); text-align: center; display: grid; justify-items: center; }
+section + section { border-top: 1px solid var(--line); }
+section > * { min-width: 0; max-width: 100%; }
+.eyebrow { font: 600 var(--t-sub)/1.2 var(--display); letter-spacing: -0.01em; color: var(--accent); margin-bottom: var(--s2); }
+h1 { font-size: var(--t-display); line-height: 1.02; letter-spacing: -0.04em; max-width: 16ch; }
+h2 { font-size: var(--t-h2); line-height: 1.08; letter-spacing: -0.03em; max-width: 22ch; }
+h3 { font-size: var(--t-h3); line-height: 1.15; letter-spacing: -0.02em; }
+.sub { margin-top: var(--s3); max-width: 46ch; font-size: var(--t-sub); line-height: 1.45; color: var(--muted); text-wrap: balance; }
+.sub b { color: var(--ink); font-weight: 600; }
+.visual { margin-top: var(--s5); width: 100%; }
+.cap { font-size: var(--t-cap); line-height: 1.5; color: var(--muted); max-width: 72ch; margin-inline: auto; text-wrap: pretty; }
+.cap a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.cap + .cap { margin-top: var(--s1); }
+.visual + .cap, .tile + .cap { margin-top: var(--s3); }
+.block { margin-top: var(--s6); width: 100%; display: grid; justify-items: center; }
+.block > .lead { margin-top: var(--s2); max-width: 46ch; color: var(--muted); font-size: var(--t-body); text-wrap: balance; }
+.tile { background: var(--panel); border-radius: var(--r); width: 100%; }
+
+.cta { margin-top: var(--s4); display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.btn { display: inline-flex; align-items: center; padding: 12px 22px; border-radius: 999px; font: 500 17px/1 var(--body); color: var(--accent); border: 1px solid var(--accent); }
+.btn:hover { text-decoration: none; background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:hover { background: color-mix(in srgb, var(--accent) 88%, #fff); }
+
+/* hero */
+.hero { padding-block: 112px var(--s6); border-top: 0; }
+.stats { margin-top: var(--s5); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); width: 100%; max-width: 900px; }
+.stat { display: grid; gap: 6px; align-content: start; }
+.stat b { font: 700 clamp(40px, 5vw, 56px)/1 var(--display); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 15px; line-height: 1.4; color: var(--muted); text-wrap: balance; }
+.timeline { list-style: none; margin: 0; padding: var(--s4) var(--s3); display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); position: relative; text-align: center; }
+.timeline::before { content: ""; position: absolute; left: calc(var(--s3) + 100% / 16 - var(--s3) / 8); right: calc(var(--s3) + 100% / 16 - var(--s3) / 8); top: calc(var(--s4) + 5px); height: 2px; background: var(--track); }
+.timeline li { position: relative; display: grid; gap: 6px; align-content: start; justify-items: center; padding-inline: 4px; }
+.timeline li::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--base); position: relative; z-index: 1; box-shadow: 0 0 0 4px var(--panel); }
+.timeline li.now::before { background: var(--accent); }
+.timeline .v { margin-top: 10px; font: 600 17px/1.2 var(--display); letter-spacing: -0.01em; color: var(--ink); }
+.timeline li.now .v { color: var(--accent); }
+.timeline a.v:hover { text-decoration: none; }
+.timeline .d { font: 500 12px/1 var(--mono); color: var(--muted); }
+.timeline .f { font-size: 14px; line-height: 1.35; color: var(--ink-2); text-wrap: balance; }
+
+/* loop */
+.steps { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s4) var(--s3); text-align: left; counter-reset: st; }
+.steps li { display: grid; gap: var(--s1); align-content: start; border-top: 2px solid var(--track); padding-top: var(--s2); counter-increment: st; }
+.steps li:last-child { border-top-color: var(--accent); }
+.steps li::before { content: counter(st); font: 500 var(--t-cap)/1 var(--mono); color: var(--muted); }
+.steps b { font: 600 19px/1.25 var(--display); letter-spacing: -0.015em; }
+.steps span { font-size: 15px; line-height: 1.45; color: var(--muted); }
+.links2 { margin-top: var(--s4); display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) var(--s4); font-size: var(--t-body); }
+.links2 a::after { content: " \203A"; }
+
+/* one pass */
+.onepass { display: grid; grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); align-items: center; text-align: left; }
+.op-in, .op-out { background: var(--panel); border-radius: var(--r); min-width: 0; }
+.op-in { display: flex; gap: var(--s3); align-items: center; padding: var(--s2); }
+.op-in img { flex: none; width: 140px; height: 140px; object-fit: cover; border-radius: var(--r-sm); display: block; background: var(--raise); }
+.op-in div { display: grid; gap: 10px; min-width: 0; }
+.lab { font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.op-q { font: 600 19px/1.3 var(--display); letter-spacing: -0.015em; text-wrap: balance; }
+.op-arrow { display: grid; justify-items: center; gap: 6px; color: var(--accent); font: 500 14px/1 var(--body); }
+.op-arrow svg { display: block; width: 72px; height: 20px; }
+.op-out { padding: var(--s3); }
+.op-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--s2); }
+.op-head .ms { font: 500 17px/1 var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+.pbars { display: grid; gap: 10px; }
+.pb .r { display: flex; justify-content: space-between; gap: 10px; font-size: 15px; line-height: 1; color: var(--muted); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.pb.top .r { color: var(--ink); font: 600 21px/1 var(--display); letter-spacing: -0.02em; }
+.pb.top .r span:last-child { color: var(--accent); }
+.pb .t { height: 6px; border-radius: 3px; background: var(--track); overflow: hidden; }
+.pb .t i { display: block; height: 100%; border-radius: 3px; background: var(--base); }
+.pb.top .t i { background: var(--accent); }
+.vs { margin-top: var(--s3); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--s1) var(--s2); font-size: 15px; color: var(--muted); }
+.vs code { font-size: 14px; color: var(--ink-2); background: var(--panel); border-radius: 10px; padding: 8px 12px; }
+.facts { margin-top: var(--s5); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); width: 100%; text-align: left; }
+.facts div { display: grid; gap: 6px; align-content: start; border-top: 1px solid var(--line); padding-top: var(--s2); }
+.facts b { font: 600 19px/1.25 var(--display); letter-spacing: -0.015em; }
+.facts span { font-size: 15px; color: var(--muted); }
+
+/* v6: video, effort control, examples, board */
+.film { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--r); background: #000; }
+.seg { display: inline-grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 4px; gap: 2px; border-radius: 999px; background: var(--raise); margin-top: var(--s4); }
+.seg button { font: 500 16px/1 var(--body); padding: 11px 26px; border-radius: 999px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; transition: background .2s, color .2s; }
+.seg button[aria-checked="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+.effort { margin-top: var(--s3); padding: var(--s4); display: grid; gap: var(--s4); text-align: left; max-width: 900px; }
+.e-top { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1.15fr); gap: var(--s3); }
+.e-top div { display: grid; gap: 6px; align-content: start; }
+.e-top b { font: 700 clamp(30px, 3.6vw, 40px)/1 var(--display); letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.e-top .use b { font: 600 19px/1.3 var(--display); letter-spacing: -0.015em; }
+.e-top span { font-size: var(--t-cap); color: var(--muted); }
+.strip { display: grid; grid-template-columns: repeat(32, minmax(0, 1fr)); gap: 3px; }
+.strip i { height: 36px; border-radius: 3px; background: var(--track); transition: background .25s, opacity .25s; }
+.strip i.on { background: var(--accent); }
+.strip i.maybe { background: var(--accent); opacity: .35; }
+.ticks { position: relative; height: 16px; margin-top: 8px; font: 500 12px/1 var(--mono); color: var(--muted); }
+.ticks span { position: absolute; transform: translateX(-100%); }
+.e-note { font-size: 15px; color: var(--muted); }
+.e-note b { color: var(--ink); font-weight: 600; }
+.ex { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); text-align: left; max-width: 900px; }
+.ex .tile { padding: var(--s3); display: grid; gap: 12px; align-content: start; }
+.efa { font-size: 15px; color: var(--muted); }
+.efr { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 12px; align-items: baseline; font: 600 21px/1.2 var(--display); letter-spacing: -0.015em; }
+.efr b { color: var(--accent); font-variant-numeric: tabular-nums; }
+.efr.no span:not(.efd), .efr.no b { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; }
+.efd { font: 500 13px/1 var(--mono); letter-spacing: 0; color: var(--muted); }
+.board { padding: var(--s4); text-align: left; max-width: 900px; }
+.vbars { display: grid; gap: 14px; }
+.vr, .vaxis { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 84px; gap: var(--s2); align-items: center; }
+.vr .vn { font-size: 15px; color: var(--muted); }
+.vr.us .vn { color: var(--ink); font-weight: 600; }
+.vt { height: 20px; background: var(--track); border-radius: 5px; overflow: hidden; }
+.vt i { display: block; height: 100%; background: var(--base); border-radius: 5px; }
+.vr.us .vt i { background: var(--accent); }
+.vr b { font: 600 26px/1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; text-align: right; color: var(--muted); }
+.vr.us b { color: var(--accent); }
+.vticks { position: relative; height: 16px; border-top: 1px solid var(--line); }
+.vticks span { position: absolute; top: 4px; transform: translateX(-50%); font: 500 12px/1 var(--mono); color: var(--muted); }
+.vticks span:first-child { transform: none; }
+.vticks span:last-child { transform: translateX(-100%); }
+.board .cap { margin: var(--s3) 0 0; text-align: left; }
+
+/* v5: the cut */
+.cut { padding: var(--s4); max-width: 900px; text-align: left; display: grid; gap: var(--s4); }
+.cut .strip i.off { background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.cut-lab { display: flex; justify-content: space-between; gap: var(--s2); margin-top: 8px; font: 500 12px/1.3 var(--mono); color: var(--muted); }
+.cut-lab span:first-child { color: var(--accent); }
+.nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); }
+.nums div { display: grid; gap: 6px; align-content: start; }
+.nums b { font: 700 clamp(32px, 4vw, 44px)/1 var(--display); letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.nums span { font-size: 14px; line-height: 1.4; color: var(--muted); }
+.nums.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.nums .was { font: 500 13px/1.3 var(--mono); color: var(--muted); }
+.ba { padding: var(--s4); max-width: 900px; text-align: left; }
+.ba .cap { margin: var(--s3) 0 0; text-align: left; }
+
+/* v4: image wall */
+.wall { --ww: max(100%, min(1180px, calc(100vw - 56px))); width: var(--ww); margin-inline: calc((100% - var(--ww)) / 2); display: grid; gap: var(--s2); position: relative; text-align: left; min-width: 0; }
+.wcount { justify-self: center; font: 500 15px/1.2 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.wcount b { color: var(--ink); font-weight: 500; }
+.wcount #wall-n { color: var(--accent); }
+.wgrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.wt { min-width: 0; }
+.wb { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; margin: 0; border: 0; border-radius: var(--r-sm); overflow: hidden; background: var(--raise); cursor: pointer; color: #fff; text-align: left; font: inherit; -webkit-tap-highlight-color: transparent; }
+.wb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .45s cubic-bezier(.2, .7, .2, 1), filter .35s ease; }
+.wb::after { content: ""; position: absolute; inset: 38% 0 0; background: linear-gradient(rgba(8, 10, 14, 0), rgba(8, 10, 14, .55) 45%, rgba(8, 10, 14, .9)); pointer-events: none; }
+.wb:hover img, .wt.open .wb img { transform: scale(1.05); }
+.wt.open .wb { box-shadow: 0 0 0 2px var(--accent); }
+.wcap { position: absolute; left: 9px; right: 9px; bottom: 8px; z-index: 1; display: flex; flex-direction: column; gap: 2px; }
+.wq, .wa { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wq { font: 500 12px/1.25 var(--body); color: rgba(255, 255, 255, .82); }
+.wa { display: flex; align-items: baseline; gap: 6px; font: 600 15px/1.15 var(--body); letter-spacing: -0.015em; }
+.wa b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.wa em { flex: none; font: 500 12px/1 var(--mono); font-style: normal; color: #9ccfff; font-variant-numeric: tabular-nums; }
+.wx { flex: none; display: inline-grid; place-items: center; width: 17px; height: 17px; margin-left: auto; border-radius: 50%; background: #ff6b5e; color: #1a0e0a; font: 700 12px/1 var(--body); font-style: normal; }
+.wt.miss .wb { box-shadow: inset 0 0 0 2px rgba(255, 138, 107, .85); }
+.wt.miss.open .wb { box-shadow: 0 0 0 2px var(--accent), inset 0 0 0 2px rgba(255, 138, 107, .85); }
+.wall.pre .wa { opacity: 0; transform: translateY(7px) scale(.92); transform-origin: left bottom; }
+.wall.pre .wt:not(.on) img { filter: brightness(.55) saturate(.5); }
+.wall.pre .wt.on .wa { opacity: 1; transform: none; transition: opacity .18s ease-out, transform .32s cubic-bezier(.2, .9, .3, 1.35); }
+.wfoot { text-align: center; justify-self: center; max-width: 72ch; display: grid; gap: var(--s1); padding-inline: 4px; margin-top: var(--s1); }
+.wfoot p:first-child { font-size: 15px; color: var(--muted); }
+.wfoot b { color: var(--ink); font-weight: 600; }
+.wfoot .small { font-size: var(--t-cap); line-height: 1.5; color: var(--muted); }
+.wfoot a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.wtip { position: absolute; z-index: 6; width: min(360px, calc(100% - 8px)); background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; display: grid; gap: 10px; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); pointer-events: none; }
+.wtip[hidden] { display: none; }
+.wtip .tag { font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.wtip .tq { font: 600 16px/1.3 var(--display); letter-spacing: -0.01em; text-wrap: pretty; }
+.wtip .vctx { font-size: 13px; color: var(--muted); }
+.opts { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.opt { display: grid; grid-template-columns: minmax(0, 120px) 1fr 50px; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+.opt .ol { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.opt .ob { height: 8px; border-radius: 4px; background: var(--track); overflow: hidden; }
+.opt .ob i { display: block; height: 100%; width: var(--w); background: var(--base); border-radius: 4px; }
+.opt .op { text-align: right; font: 500 12px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.opt.pick { color: var(--ink); font-weight: 600; }
+.opt.pick .ob i { background: var(--accent); }
+.opt.rest { display: block; font-size: 12px; }
+.wtip .tf { display: flex; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.wtip .tf .y { color: var(--ok); font-weight: 600; }
+.wtip .tf .n { color: var(--bad); font-weight: 600; }
+.wtip .tc { font-size: 12px; color: var(--muted); }
+
+/* v4: factory defects */
+.defects { padding: var(--s4); max-width: 900px; text-align: left; display: grid; gap: var(--s3); }
+.defects .vr, .defects .vaxis { grid-template-columns: minmax(0, 260px) minmax(0, 1fr) 72px; }
+.fctl { display: grid; grid-template-columns: auto minmax(0, 1fr) 56px; gap: var(--s2); align-items: center; font-size: 15px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: var(--s3); }
+.fctl output { font: 600 21px/1 var(--display); color: var(--accent); text-align: right; font-variant-numeric: tabular-nums; }
+.fctl input { width: 100%; accent-color: var(--accent); margin: 0; }
+.fstats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); }
+.fstat { display: grid; gap: 4px; }
+.fstat b { font: 700 clamp(30px, 4vw, 40px)/1 var(--display); letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.fstat b small { font: 500 15px/1 var(--mono); color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+.fstat > span { font-size: 14px; color: var(--muted); }
+.fstat.caught b { color: var(--bad); }
+.fstat.wrong b { color: var(--good); }
+.fplot { position: relative; touch-action: pan-y; cursor: ew-resize; }
+.fplot canvas { display: block; width: 100%; height: 170px; }
+.flegend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: var(--t-cap); color: var(--muted); }
+.flegend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+
+/* v4: Breakout */
+.game { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s5); align-items: center; text-align: left; max-width: 900px; }
+.game video { display: block; width: 100%; height: auto; aspect-ratio: 822 / 892; border-radius: var(--r); background: #f6f4ef; }
+.game h3 { margin-bottom: var(--s2); }
+.game p { color: var(--muted); }
+.game .cap { margin: var(--s2) 0 0; }
+
+/* earlier releases */
+.rel { list-style: none; margin: var(--s5) 0 0; padding: 0; text-align: left; max-width: 900px; width: 100%; }
+.rel li { display: grid; grid-template-columns: 88px 136px minmax(0, 1fr); gap: var(--s3); padding-block: var(--s3); border-top: 1px solid var(--line); align-items: baseline; }
+.rel li:last-child { border-bottom: 1px solid var(--line); }
+.rel .v { font: 600 21px/1.2 var(--display); letter-spacing: -0.02em; color: var(--ink); }
+.rel .d { font: 500 var(--t-cap)/1.2 var(--mono); color: var(--muted); }
+.rel p { color: var(--ink-2); }
+.rel p span { color: var(--muted); }
+
+/* start */
+.cmds { display: grid; gap: 12px; text-align: left; max-width: 820px; }
+.cmd { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--s2); align-items: center; }
+.cmd .k { font: 500 15px/1 var(--mono); color: var(--muted); text-align: right; }
+.codebox { position: relative; background: var(--panel); border-radius: var(--r-sm); min-width: 0; }
+.codebox pre { margin: 0; padding: 16px 84px 16px 20px; overflow-x: auto; font: 14px/1.6 var(--mono); }
+.codebox code { font-size: 1em; }
+.copy { position: absolute; top: 10px; right: 10px; font: 500 13px/1 var(--body); padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); cursor: pointer; }
+
+/* footer */
+footer { border-top: 1px solid var(--line); padding-block: var(--s4) var(--s5); font-size: var(--t-cap); color: var(--muted); }
+footer .wrap { display: grid; gap: var(--s2); }
+footer nav { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); }
+footer nav a { color: var(--ink-2); }
+footer b { color: var(--ink-2); font-weight: 600; }
+footer p a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+
+/* reveal: switched on by JS only when motion is allowed */
+.rv-on .rv { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2, .8, .2, 1), transform .8s cubic-bezier(.2, .8, .2, 1); }
+.rv-on .rv.in { opacity: 1; transform: none; }
+
+@media (max-width: 820px) {
+  :root { --s6: 88px; --s5: 44px; --s4: 28px; }
+  nav.links a.opt-nav { display: none; }
+  .hero { padding-block: 72px var(--s6); }
+  .stats { gap: 12px; }
+  .stat b { font-size: 30px; }
+  .stat span { font-size: 13px; }
+  .timeline { grid-template-columns: 1fr; padding: var(--s3); text-align: left; gap: var(--s2); }
+  .timeline::before { left: calc(var(--s3) + 5px); right: auto; width: 2px; top: calc(var(--s3) + 12px); bottom: calc(var(--s3) + 12px); height: auto; }
+  .timeline li { grid-template-columns: 12px 64px minmax(0, 1fr); grid-template-areas: "dot v f" ". d f"; justify-items: start; column-gap: var(--s2); row-gap: 2px; padding: 0; }
+  .timeline li::before { grid-area: dot; margin-top: 4px; }
+  .timeline .v { grid-area: v; margin: 0; }
+  .timeline .d { grid-area: d; }
+  .timeline .f { grid-area: f; text-wrap: pretty; }
+  .steps { grid-template-columns: 1fr; gap: var(--s3); }
+  .onepass { grid-template-columns: minmax(0, 1fr); }
+  .op-arrow { grid-auto-flow: column; justify-content: center; align-items: center; gap: 6px; padding-block: 12px; }
+  .op-arrow svg { transform: rotate(90deg); width: 44px; height: 18px; }
+  .op-in img { width: 96px; height: 96px; }
+  .op-q { font-size: 17px; }
+  .vs { flex-direction: column; }
+  .facts { grid-template-columns: 1fr; gap: var(--s2); }
+  .seg button { padding: 10px 14px; font-size: 15px; }
+  .effort, .board, .cut, .defects { padding: var(--s3) 20px; }
+  .e-top { grid-template-columns: 1fr; gap: var(--s2); }
+  .strip { gap: 2px; }
+  .strip i { height: 28px; border-radius: 2px; }
+  .ex { grid-template-columns: 1fr; }
+  .vr, .vaxis, .defects .vr, .defects .vaxis { grid-template-columns: minmax(0, 1fr) 64px; gap: 4px 12px; }
+  .vr .vn { grid-column: 1 / -1; }
+  .vaxis .vn { display: none; }
+  .vr b { font-size: 22px; }
+  .nums { grid-template-columns: 1fr; gap: var(--s2); }
+  .nums.four { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3) var(--s2); }
+  .ba { padding: var(--s3) 20px; }
+  .wgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .wb { border-radius: 10px; }
+  .wcap { left: 6px; right: 6px; bottom: 5px; gap: 1px; }
+  .wq { font-size: 12px; }
+  .wa { font-size: 13px; gap: 0 4px; flex-wrap: wrap; white-space: normal; line-height: 1.1; }
+  .wa b { white-space: normal; }
+  .wa em { font-size: 12px; }
+  .wx { width: 15px; height: 15px; font-size: 12px; }
+  .fctl { grid-template-columns: minmax(0, 1fr) 56px; }
+  .fctl label { grid-column: 1 / -1; }
+  .fstats { gap: var(--s2); }
+  .game { grid-template-columns: 1fr; gap: var(--s3); }
+  .game video { max-width: 360px; margin-inline: auto; }
+  .rel li { grid-template-columns: auto minmax(0, 1fr); gap: 4px var(--s2); }
+  .rel li p { grid-column: 1 / -1; }
+  .codebox pre { font-size: 13px; padding: 14px 16px; padding-top: 48px; }
+  .cmd { grid-template-columns: 18px minmax(0, 1fr); gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip i, .seg button, .wb img { transition: none; }
+  .wb:hover img, .wt.open .wb img { transform: none; }
+  .rv-on .rv { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="wrap">
+  <a class="brand" href="#top">RSI-Jev</a>
+  <nav class="links" aria-label="Page">
+    <a href="#loop" class="opt-nav">How it’s built</a>
+    <a href="#v70">Releases</a>
+    <a href="#start">Get started</a>
+    <a href="https://github.com/Shanghua-Gao/RSI-Jev">GitHub</a>
+    <button class="theme" id="theme" type="button" aria-label="Switch light or dark theme" hidden>◐</button>
+  </nav>
+</div>
+</header>
+
+<main class="wrap">
+
+<section class="hero" id="top">
+  <p class="eyebrow">RSI-Jev</p>
+  <h1>System One models, built by AI scientists.</h1>
+  <p class="sub"><a href="https://github.com/mims-harvard/AutoScientists">AutoScientists</a>, our AI research agents, propose each change, predict its result before running it, and retire their own champions. Every release and every failed experiment is published.</p>
+  <div class="cta">
+    <a class="btn primary" href="#start">Get started</a>
+    <a class="btn" href="https://huggingface.co/shgao">Hugging Face</a>
+    <a class="btn" href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/EXPLORE.md">Every experiment</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>9</b><span>releases in 41 days</span></div>
+    <div class="stat"><b>801</b><span>experiments, all published, failures included</span></div>
+    <div class="stat"><b>65.64</b><span>Decision Index 0.3 public set, <span style="white-space:nowrap">v6.1-VL</span> 27B</span></div>
+  </div>
+  <div class="visual tile">
+    <ol class="timeline" aria-label="Releases, oldest to newest">
+      <li><a class="v" href="#earlier">v1.0</a><span class="d">Sep 25</span><span class="f">Probabilities in one pass</span></li>
+      <li><a class="v" href="#earlier">v2.0</a><span class="d">Sep 26</span><span class="f">A confidence head</span></li>
+      <li><a class="v" href="#earlier">v2.1</a><span class="d">Sep 27</span><span class="f">Better everywhere it was checked</span></li>
+      <li><a class="v" href="#earlier">v3.0</a><span class="d">Sep 28</span><span class="f">The first RL win</span></li>
+      <li><a class="v" href="#v4">v4.0-VL</a><span class="d">Oct 1</span><span class="f">Reads images</span></li>
+      <li><a class="v" href="#v5">v5.0-VL</a><span class="d">Oct 2</span><span class="f">20 of 32 layers</span></li>
+      <li><a class="v" href="#v6">v6.0-VL</a><span class="d">Oct 6</span><span class="f">Chooses its depth</span></li>
+      <li><a class="v" href="#v61-27b">v6.1-VL</a><span class="d">Oct 7–8</span><span class="f">Averages two fine-tunes, at 4B and 27B</span></li>
+      <li class="now"><a class="v" href="#v70">v7.0-VL</a><span class="d">Nov 5–6</span><span class="f">Reads the options both ways, at 4B and 3B</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="loop">
+  <p class="eyebrow">How it’s built</p>
+  <h2>The agents run the research.</h2>
+  <p class="sub">Each change starts as a hypothesis and ends as a release or a published failure.</p>
+  <ol class="visual steps">
+    <li><b>Hypothesis</b><span>An agent proposes a change: new data, a new loss, a new architecture.</span></li>
+    <li><b>Prediction</b><span>It writes down the result it expects before any GPU time is spent.</span></li>
+    <li><b>Experiment</b><span>It trains the change and measures it against the current champion.</span></li>
+    <li><b>Keep or retire</b><span>A winner becomes the next release. Everything else is published with its numbers.</span></li>
+  </ol>
+  <p class="links2"><a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/docs/history.md">How each release was made</a><a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/EXPLORE.md">Every experiment, and why it failed</a></p>
+</section>
+
+<section id="system-one">
+  <p class="eyebrow">What the models do</p>
+  <h2>One pass. A probability for every answer.</h2>
+  <p class="sub">A System One model reads the question and decides. It writes no text and spends no reasoning tokens, so there is nothing to parse.</p>
+  <div class="visual">
+    <div class="onepass" role="group" aria-label="One pass: an image and a question go in, a probability for every answer comes out in 61 ms">
+      <div class="op-in"><img src="assets/v4/ex-speed-80.webp" alt="A round road sign showing a speed limit of 80." width="140" height="140" decoding="async"><div><span class="lab">image + question</span><p class="op-q">Which speed limit number is written on the object in the image?</p></div></div>
+      <div class="op-arrow" aria-hidden="true"><svg viewBox="0 0 84 24"><path d="M3 12 H76 M66 4 L78 12 L66 20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>one pass</span></div>
+      <div class="op-out">
+        <div class="op-head"><span class="lab">probabilities</span><span class="ms">61 ms</span></div>
+        <div class="pbars">
+          <div class="pb top"><div class="r"><span>80</span><span>99.7%</span></div><div class="t"><i style="width:99.67%"></i></div></div>
+          <div class="pb"><div class="r"><span>50</span><span>&lt;1%</span></div><div class="t"><i style="width:0.6%"></i></div></div>
+          <div class="pb"><div class="r"><span>none</span><span>&lt;1%</span></div><div class="t"><i style="width:0.6%"></i></div></div>
+          <div class="pb"><div class="r"><span>2 more answers</span><span>&lt;1%</span></div><div class="t"><i style="width:0.6%"></i></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="vs"><span>A chat model writes instead:</span><code>{"speed_limit": "80"}</code><span>11 tokens · 333 ms · no probability</span></p>
+  </div>
+  <p class="cap" style="margin-top:var(--s3)">Recorded with v4.0-VL 2B on one GB10. The chat model is Qwen3.5-2B, writing its answer as JSON.</p>
+  <div class="facts">
+    <div><b>Yes/no, pick one, rate</b><span>Typed questions about text and up to four images.</span></div>
+    <div><b>Calibrated</b><span>A probability for every option, fitted so confidence matches accuracy.</span></div>
+    <div><b>Jev-compatible</b><span><code>POST /v1/systemone</code>. Existing Jev code works once its base URL points here.</span></div>
+  </div>
+</section>
+
+<section id="v70">
+  <p class="eyebrow">v7.0-VL 4B · November 5</p>
+  <h2>A new way to read the options.</h2>
+  <p class="sub">v7.0-VL repeats the option list once and lets the question and the options see each other in both directions. It starts from the instruction-tuned Qwen3.5-4B and was trained once, end to end, on data the loop built round by round for its weakest tasks.</p>
+  <div class="visual tile ba">
+    <div class="nums four">
+      <div><b>60.63</b><span>Decision Index 0.3</span><span class="was">v6.1-VL 4B 50.98</span></div>
+      <div><b>0.811</b><span>held-out set</span><span class="was">v6.1-VL 4B 0.728</span></div>
+      <div><b>0.502</b><span>MMLU-Pro</span><span class="was">v6.1-VL 4B 0.462</span></div>
+      <div><b>0.839</b><span>held-out images</span><span class="was">v6.1-VL 4B 0.834</span></div>
+    </div>
+    <p class="cap">Decision Index: public index, full run, effort unset (the released files read 60.61). The rest at 32 layers, on the same evaluation sets with the same code. Better calibrated (final ECE 0.039, against 0.048); KoBBQ is lower (0.903, against 0.937). The same request gets the same answer on every run.</p>
+  </div>
+  <p class="links2"><a href="https://huggingface.co/shgao/rsi-jev-v7.0-vl-4b">The model on Hugging Face</a><a href="https://huggingface.co/shgao/rsi-jev-v7.0-vl-3b">The 3B cut, at layer 20</a><a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v7.0-vl.md">How it was made</a></p>
+</section>
+
+<section id="v61-27b">
+  <p class="eyebrow">v6.1-VL 27B · October 8</p>
+  <h2>The same recipe at 27B.</h2>
+  <p class="sub">Two fine-tunes of Qwen3.8-27B, averaged, with answer heads at layers 48, 56 and 64. It runs on one 96 GB GPU.</p>
+  <div class="visual tile ba">
+    <div class="nums four">
+      <div><b>65.64</b><span>Decision Index 0.3</span><span class="was">v6.1-VL 4B 50.98</span></div>
+      <div><b>0.808</b><span>held-out set</span><span class="was">v6.1-VL 4B 0.728</span></div>
+      <div><b>0.660</b><span>MMLU-Pro</span><span class="was">v6.1-VL 4B 0.462</span></div>
+      <div><b>0.858</b><span>held-out images</span><span class="was">v6.1-VL 4B 0.834</span></div>
+    </div>
+    <p class="cap">Decision Index: public set, effort <code>auto</code>; 65.46 with effort unset. The official score is pending. The rest at the deepest layer, on the same evaluation sets. Final ECE 0.064, against 0.048 for the 4B.</p>
+  </div>
+  <p class="links2"><a href="https://huggingface.co/shgao/rsi-jev-v6.1-vl-27b">The model on Hugging Face</a><a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v6.1-vl-27b.md">How it was made</a></p>
+</section>
+
+<section id="v61">
+  <p class="eyebrow">v6.1-VL 4B · October 7</p>
+  <h2>Two fine-tunes, averaged.</h2>
+  <p class="sub">v6.1-VL is the average of v6.0-VL and a second fine-tune of the same base. Nothing was trained after the average; the temperatures were refit.</p>
+  <div class="visual tile ba">
+    <div class="nums four">
+      <div><b>50.98</b><span>Decision Index 0.3</span><span class="was">v6.0-VL 46.23</span></div>
+      <div><b>0.728</b><span>held-out set</span><span class="was">v6.0-VL 0.695</span></div>
+      <div><b>0.462</b><span>MMLU-Pro</span><span class="was">v6.0-VL 0.443</span></div>
+      <div><b>0.834</b><span>held-out images</span><span class="was">v6.0-VL 0.825</span></div>
+    </div>
+    <p class="cap">Both models on the same evaluation sets with the same code, at 32 layers. Calibration is a little worse: final ECE 0.048, against 0.036.</p>
+  </div>
+  <p class="links2"><a href="https://huggingface.co/shgao/rsi-jev-v6.1-vl-4b">The model on Hugging Face</a><a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v6.1-vl.md">How it was made</a></p>
+
+  <div class="block" id="result61">
+    <h3>On the public Decision Index.</h3>
+    <div class="tile board" style="margin-top:var(--s4)">
+      <div class="vbars"><div class="vr us"><span class="vn">RSI-Jev v6.1-VL, 4B</span><span class="vt"><i style="width:85.0%"></i></span><b>50.98</b></div><div class="vr"><span class="vn">ezjev 4B s2</span><span class="vt"><i style="width:84.7%"></i></span><b>50.82</b></div><div class="vr"><span class="vn">RSI-Jev v6.0-VL, 4B</span><span class="vt"><i style="width:77.0%"></i></span><b>46.23</b></div><div class="vr"><span class="vn">jiwo 4B</span><span class="vt"><i style="width:76.3%"></i></span><b>45.76</b></div><div class="vr"><span class="vn">Nox 4B</span><span class="vt"><i style="width:73.7%"></i></span><b>44.21</b></div><div class="vr"><span class="vn">JPT-4B</span><span class="vt"><i style="width:71.4%"></i></span><b>42.82</b></div><div class="vaxis" aria-hidden="true"><span class="vn"></span><span class="vticks"><span style="left:0%">0</span><span style="left:16.67%">10</span><span style="left:33.33%">20</span><span style="left:50%">30</span><span style="left:66.67%">40</span><span style="left:83.33%">50</span><span style="left:100%">60</span></span><b></b></div></div>
+      <p class="cap">Decision Index 0.3, public index, board of <span style="white-space:nowrap">2026-10-06</span>; 4B models and smaller. RSI-Jev: full runs with the pre-release 0.3 kit.</p>
+    </div>
+  </div>
+</section>
+
+<section id="v6">
+  <p class="eyebrow">v6.0-VL 4B · October 6</p>
+  <h2>Fast when it’s easy. Deep when it’s hard.</h2>
+  <p class="sub">Choose how many layers it uses: 16, 20 or 32, in one pass. <b>Effort is layers, not tokens.</b></p>
+  <div id="effort" class="visual" style="display:grid;justify-items:center">
+    <div class="seg" style="margin-top:0" role="radiogroup" aria-label="Effort" id="seg">
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-k="low">low</button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-k="medium">medium</button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-k="high">high</button>
+      <button type="button" role="radio" aria-checked="true" tabindex="0" data-k="auto">auto</button>
+    </div>
+    <div class="tile effort" aria-live="polite">
+      <div class="e-top">
+        <div><b id="e-layers">16, 20 or 32</b><span>layers</span></div>
+        <div><b id="e-ms">Varies</b><span id="e-msl">between medium and high</span></div>
+        <div class="use"><b id="e-use">Mixed traffic</b><span id="e-why">deeper only when unsure</span></div>
+      </div>
+      <div>
+        <div class="strip" id="strip" aria-hidden="true"></div>
+        <div class="ticks" aria-hidden="true"><span style="left:50%">16</span><span style="left:62.5%">20</span><span style="left:100%">32</span></div>
+      </div>
+      <p class="e-note" id="e-note">Answers at layer 16 when it is nearly sure, at 20 when it is sure enough, and at 32 otherwise.</p>
+    </div>
+    <p class="cap" style="margin-top:var(--s3)">Questions with images always use all 32 layers. Every response reports the layer that answered.</p>
+
+  </div>
+  <div class="block" id="examples">
+    <h3>Easy questions stop early. Hard ones go deep.</h3>
+    <div class="ex" style="margin-top:var(--s4)">
+      <div class="tile"><span class="lab">easy · BANKING77</span><p class="op-q">“I need a refund?”</p><p class="efa">Which intent?</p><div class="efr"><span class="efd">16 layers</span><span>request refund</span><b>99%</b></div></div>
+      <div class="tile"><span class="lab">hard · WinoGrande</span><p class="op-q">“The woman used a gentle technique when painting the urn but applied more pressure when painting the vase, because the _ was more fragile.”</p><p class="efa">Urn or vase?</p><div class="efr no"><span class="efd">16 layers</span><span>Vase</span><b>51%</b></div><div class="efr"><span class="efd">32 layers</span><span>Urn</span><b>95%</b></div></div>
+    </div>
+    <p class="cap" style="margin-top:var(--s3)">Real outputs of the released model on Decision Index items. BANKING77 is CC BY 4.0; WinoGrande is CC BY.</p>
+  </div>
+
+  <div class="block" id="result">
+    <h3>At release, the best 4B model on the public Decision Index.</h3>
+    <div class="tile board" style="margin-top:var(--s4)">
+      <div class="vbars"><div class="vr us"><span class="vn">RSI-Jev v6.0-VL, 4B</span><span class="vt"><i style="width:92.5%"></i></span><b>46.24</b></div><div class="vr"><span class="vn">JPT-4B, 4.7B</span><span class="vt"><i style="width:86.1%"></i></span><b>43.04</b></div><div class="vr"><span class="vn">Jet v6.2, 4.7B</span><span class="vt"><i style="width:85.2%"></i></span><b>42.60</b></div><div class="vr"><span class="vn">Decider 4B, 4.7B</span><span class="vt"><i style="width:81.4%"></i></span><b>40.70</b></div><div class="vr"><span class="vn">RSI-Jev v5.0-VL, 3B</span><span class="vt"><i style="width:76.8%"></i></span><b>38.38</b></div><div class="vaxis" aria-hidden="true"><span class="vn"></span><span class="vticks"><span style="left:0%">0</span><span style="left:20%">10</span><span style="left:40%">20</span><span style="left:60%">30</span><span style="left:80%">40</span><span style="left:100%">50</span></span><b></b></div></div>
+      <p class="cap">v6.0-VL at release: Decision Index 0.2.1, public board of 2026-09-28. Full run, with rows that overlap our training data removed; 14th of 71 overall. Sizes are served parameters.</p>
+    </div>
+  </div>
+
+  <div class="block" id="film">
+    <h3>The release film.</h3>
+    <div class="visual" style="margin-top:var(--s4)"><video class="film" controls playsinline preload="metadata" poster="assets/v6/system-one-effort-poster.jpg" width="1920" height="1080" aria-label="Release video: an easy and a hard question answered at different depths, the four effort levels, and the Decision Index board."><source src="assets/v6/system-one-effort.mp4" type="video/mp4"></video></div>
+  </div>
+</section>
+
+<section id="v5">
+  <p class="eyebrow">v5.0-VL 3B · October 2</p>
+  <h2>It doesn’t need the whole LLM.</h2>
+  <p class="sub">A language model’s deepest layers mostly shape the next word. A System One model never writes, so v5.0-VL keeps only the first 20 of Qwen3.5-4B-Base’s 32 layers.</p>
+  <div class="visual tile cut">
+    <div>
+      <div class="strip" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i></div>
+      <div class="cut-lab"><span>layers 1–20 run</span><span>layers 21–32 are not in the checkpoint</span></div>
+    </div>
+    <div class="nums">
+      <div><b>0.760</b><span>decision suite read at layer 20, against 0.761 at layer 32</span></div>
+      <div><b>0.932</b><span>says “unknown” when a question has no answer (KoBBQ). v4.0-VL: 0.179</span></div>
+      <div><b>38.38</b><span>Decision Index, full run: best at 3B and under on the board at the time</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="v4">
+  <p class="eyebrow">v4.0-VL 2B · October 1</p>
+  <h2>It reads images.</h2>
+  <p class="sub">Send one to four pictures with a request and ask the same typed questions. On five held-out image benchmarks it answered <b>80.3%</b> correctly; with the images blanked out, 45.8%.</p>
+  <div class="visual">
+<!-- wall:start -->
+  <div class="wall" id="wall">
+    <p class="wcount" aria-live="off"><b id="wall-n">36</b> decisions · median <b>76 ms</b> each</p>
+    <ul class="wgrid" aria-label="36 pictures, each with the model's answer and its probability">
+      <li class="wt" data-i="0"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is everything in the photo good, or is at least one part defective? Answer: yes, 68%."><img src="assets/v4/wall/w00.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Defective?</span><span class="wa"><b>yes</b> <em>68%</em></span></span></button></li>
+      <li class="wt" data-i="1"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which speed limit number is written on the object in the image? Answer: 80, 99.7%."><img src="assets/v4/wall/w01.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Speed limit</span><span class="wa"><b>80</b> <em>99.7%</em></span></span></button></li>
+      <li class="wt" data-i="2"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there a teddy bear in the image? Answer: yes, 99.8%."><img src="assets/v4/wall/w02.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Teddy bear?</span><span class="wa"><b>yes</b> <em>99.8%</em></span></span></button></li>
+      <li class="wt" data-i="3"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which plan is cheaper in the last month shown? Answer: Plan B, 94%."><img src="assets/v4/wall/w03.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Cheaper plan</span><span class="wa"><b>Plan B</b> <em>94%</em></span></span></button></li>
+      <li class="wt" data-i="4"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which button should the agent click? Answer: Cancel, 99.4%."><img src="assets/v4/wall/w04.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Which button</span><span class="wa"><b>Cancel</b> <em>99.4%</em></span></span></button></li>
+      <li class="wt" data-i="5"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Are there any blue objects to the left of the red cylinder? Answer: no, 85%."><img src="assets/v4/wall/w05.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Blue left of red cylinder?</span><span class="wa"><b>no</b> <em>85%</em></span></span></button></li>
+      <li class="wt" data-i="6"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What should the car do about the object in the image, which is on the road, in the car&#x27;s lane, ahead of the car? Answer: Wait for green, 97%."><img src="assets/v4/wall/w06.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Car should</span><span class="wa"><b>Wait for green</b> <em>97%</em></span></span></button></li>
+      <li class="wt" data-i="7"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is everything in the photo good, or is at least one part defective? Answer: yes, 76%."><img src="assets/v4/wall/w07.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Defective?</span><span class="wa"><b>yes</b> <em>76%</em></span></span></button></li>
+      <li class="wt" data-i="8"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which numbered column contains the white ball? Choose its current column, from 1 on the left to 5 on the right. Ignore the orange paddle. Answer: 4, 99.2%."><img src="assets/v4/wall/w08.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Ball in lane</span><span class="wa"><b>4</b> <em>99.2%</em></span></span></button></li>
+      <li class="wt" data-i="9"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there a dog in the image? Answer: no, 99.6%."><img src="assets/v4/wall/w09.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Dog?</span><span class="wa"><b>no</b> <em>99.6%</em></span></span></button></li>
+      <li class="wt" data-i="10"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What should happen to this expense? Answer: Review, 89%."><img src="assets/v4/wall/w10.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">This expense</span><span class="wa"><b>Review</b> <em>89%</em></span></span></button></li>
+      <li class="wt miss" data-i="11"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="How many green triangles are there? Answer: 2, 70%. Wrong, the reference is 3."><img src="assets/v4/wall/w11.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Green triangles</span><span class="wa"><b>2</b> <em>70%</em><i class="wx" title="Wrong: the reference answer is 3">✗</i></span></span></button></li>
+      <li class="wt" data-i="12"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What happened to the payment? Answer: Declined, 99.7%."><img src="assets/v4/wall/w12.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Payment</span><span class="wa"><b>Declined</b> <em>99.7%</em></span></span></button></li>
+      <li class="wt" data-i="13"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What kind of thing is the object in the image? Answer: Animal, 95%."><img src="assets/v4/wall/w13.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">What is it?</span><span class="wa"><b>Animal</b> <em>95%</em></span></span></button></li>
+      <li class="wt" data-i="14"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Are any brown objects visible? Answer: yes, 97%."><img src="assets/v4/wall/w14.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Any brown objects?</span><span class="wa"><b>yes</b> <em>97%</em></span></span></button></li>
+      <li class="wt miss" data-i="15"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is everything in the photo good, or is at least one part defective? Answer: yes, 87%. Wrong, the reference is All good."><img src="assets/v4/wall/w15.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Defective?</span><span class="wa"><b>yes</b> <em>87%</em><i class="wx" title="Wrong: the reference answer is All good">✗</i></span></span></button></li>
+      <li class="wt" data-i="16"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which quarter had the highest revenue? Answer: Q3, 99.9%."><img src="assets/v4/wall/w16.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Best quarter</span><span class="wa"><b>Q3</b> <em>99.9%</em></span></span></button></li>
+      <li class="wt" data-i="17"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there a ball in the image? Answer: yes, 99.5%."><img src="assets/v4/wall/w17.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Ball?</span><span class="wa"><b>yes</b> <em>99.5%</em></span></span></button></li>
+      <li class="wt" data-i="18"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What should the car do about the object in the image, which is on the road, in the car&#x27;s lane, ahead of the car? Answer: Stop, then go, 91%."><img src="assets/v4/wall/w18.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Car should</span><span class="wa"><b>Stop, then go</b> <em>91%</em></span></span></button></li>
+      <li class="wt" data-i="19"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="How urgently does an on-call engineer need to act on this? Answer: High, 87%."><img src="assets/v4/wall/w19.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Urgency</span><span class="wa"><b>High</b> <em>87%</em></span></span></button></li>
+      <li class="wt" data-i="20"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What does the fox eat? Answer: Rabbit, 99.9%."><img src="assets/v4/wall/w20.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Fox eats</span><span class="wa"><b>Rabbit</b> <em>99.9%</em></span></span></button></li>
+      <li class="wt" data-i="21"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is the number of gray cubes greater than the number of large purple rubber cylinders? Answer: yes, 81%."><img src="assets/v4/wall/w21.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">More gray cubes?</span><span class="wa"><b>yes</b> <em>81%</em></span></span></button></li>
+      <li class="wt" data-i="22"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there a wind turbine in the image? Answer: yes, 99.6%."><img src="assets/v4/wall/w22.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Wind turbine?</span><span class="wa"><b>yes</b> <em>99.6%</em></span></span></button></li>
+      <li class="wt" data-i="23"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is everything in the photo good, or is at least one part defective? Answer: no, 91%."><img src="assets/v4/wall/w23.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Defective?</span><span class="wa"><b>no</b> <em>91%</em></span></span></button></li>
+      <li class="wt miss" data-i="24"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What kind of thing is the object in the image? Answer: Other sign, 73%. Wrong, the reference is Harmless debris."><img src="assets/v4/wall/w24.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">What is it?</span><span class="wa"><b>Other sign</b> <em>73%</em><i class="wx" title="Wrong: the reference answer is Harmless debris">✗</i></span></span></button></li>
+      <li class="wt" data-i="25"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which channel brings the most traffic? Answer: Direct, 99.9%."><img src="assets/v4/wall/w25.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Top channel</span><span class="wa"><b>Direct</b> <em>99.9%</em></span></span></button></li>
+      <li class="wt" data-i="26"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Which element should the agent use next to reach the goal? Answer: Pay, 99.7%."><img src="assets/v4/wall/w26.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Next field</span><span class="wa"><b>Pay</b> <em>99.7%</em></span></span></button></li>
+      <li class="wt" data-i="27"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there a triangle in the image? Answer: no, 99.9%."><img src="assets/v4/wall/w27.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Any triangle?</span><span class="wa"><b>no</b> <em>99.9%</em></span></span></button></li>
+      <li class="wt" data-i="28"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What should the car do about the object in the image, which is on the road, in the car&#x27;s lane, ahead of the car? Answer: Go, 96%."><img src="assets/v4/wall/w28.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Car should</span><span class="wa"><b>Go</b> <em>96%</em></span></span></button></li>
+      <li class="wt" data-i="29"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there an umbrella in the image? Answer: no, 94%."><img src="assets/v4/wall/w29.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Umbrella?</span><span class="wa"><b>no</b> <em>94%</em></span></span></button></li>
+      <li class="wt" data-i="30"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="The vertical axis starts at zero. Answer: no, 98%."><img src="assets/v4/wall/w30.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Axis starts at 0?</span><span class="wa"><b>no</b> <em>98%</em></span></span></button></li>
+      <li class="wt" data-i="31"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is the big blue object the same shape as the large yellow object? Answer: yes, 97%."><img src="assets/v4/wall/w31.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Blue and yellow same shape?</span><span class="wa"><b>yes</b> <em>97%</em></span></span></button></li>
+      <li class="wt" data-i="32"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is everything in the photo good, or is at least one part defective? Answer: no, 86%."><img src="assets/v4/wall/w32.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Defective?</span><span class="wa"><b>no</b> <em>86%</em></span></span></button></li>
+      <li class="wt" data-i="33"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="What kind of thing is the object in the image? Answer: Harmless debris, 96%."><img src="assets/v4/wall/w33.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">What is it?</span><span class="wa"><b>Harmless debris</b> <em>96%</em></span></span></button></li>
+      <li class="wt" data-i="34"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="How urgently does an on-call engineer need to act on this? Answer: Low, 93%."><img src="assets/v4/wall/w34.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Urgency</span><span class="wa"><b>Low</b> <em>93%</em></span></span></button></li>
+      <li class="wt" data-i="35"><button type="button" class="wb" aria-describedby="wall-tip" aria-label="Is there a person in the image? Answer: no, 99.9%."><img src="assets/v4/wall/w35.webp" alt="" width="384" height="288" loading="lazy" decoding="async"><span class="wcap"><span class="wq">Person?</span><span class="wa"><b>no</b> <em>99.9%</em></span></span></button></li>
+    </ul>
+    <div class="wtip" id="wall-tip" role="tooltip" hidden></div>
+    <div class="wfoot"><p>Recorded with v4.0-VL, misses marked ✗. Across all 143 items we ran (89 images), <b>187 of 227 answers</b> were right.</p>
+    <p class="small">Hover or tap a picture for the full question and every option. Times are whole calls on one GB10. Images: VisA (Zou et al. 2022) and CLEVR (Johnson et al. 2017), CC BY 4.0, resized; road and object photos from Wikimedia Commons via reinhard-z/vision-jev: stop sign, speed sign and bicycle public domain (Dori, P.Ctnt, Ingolfson), teddy, dog, car, bag and pedestrians CC0, boy with ball CC BY 2.0 (Evgeniy Isaev), red and green lights and leaves CC BY-SA 3.0 (Jacklee; Wald1siedel), cat CC BY-SA 4.0 (Grendelkhan). The crops of the CC BY-SA photos are shared under the same licences. Charts, screens, receipt and shapes are ours (CC0). Breakout from hr98w/jev-visual (MIT). <a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/examples/gallery/CREDITS.md">Full credits</a>.</p></div>
+    <script type="application/json" id="wall-data">[{"q": "Is everything in the photo good, or is at least one part defective?", "ctx": null, "ref": ["Defective"], "opts": [["Defective", 0.678], ["All good", 0.322]], "ok": true, "ms": 254, "cat": "Factory", "credit": "Amazon Science, VisA dataset", "lic": "CC BY 4.0"}, {"q": "Which speed limit number is written on the object in the image?", "ctx": null, "ref": ["80"], "opts": [["80", 0.9973], ["50", 0.0009], ["None", 0.0007], ["120", 0.0007], ["30", 0.0004]], "ok": true, "ms": 57, "cat": "Road", "credit": "P.Ctnt", "lic": "Public domain"}, {"q": "Is there a teddy bear in the image?", "ctx": null, "ref": ["Yes"], "opts": [["Yes", 0.9984], ["No", 0.0016]], "ok": true, "ms": 60, "cat": "Is it there?", "credit": "Pixabay", "lic": "CC0"}, {"q": "Which plan is cheaper in the last month shown?", "ctx": null, "ref": ["Plan B"], "opts": [["Plan B", 0.9394], ["Plan A", 0.0606]], "ok": true, "ms": 117, "cat": "Chart", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Which button should the agent click?", "ctx": null, "ref": ["Cancel"], "opts": [["Cancel", 0.9938], ["Delete", 0.0062]], "ok": true, "ms": 79, "cat": "Screen", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Are there any blue objects to the left of the red cylinder?", "ctx": null, "ref": ["No"], "opts": [["No", 0.8464], ["Yes", 0.1536]], "ok": true, "ms": 50, "cat": "CLEVR", "credit": "Johnson et al., CLEVR (2017)", "lic": "CC BY 4.0"}, {"q": "What should the car do about the object in the image, which is on the road, in the car's lane, ahead of the car?", "ctx": null, "ref": ["Wait for green"], "opts": [["Wait for green", 0.9669], ["Stop, then go", 0.0229], ["Stop", 0.0082], ["Go", 0.0008], ["Continue", 0.0006], ["Slow down", 0.0004], ["Change speed", 0.0001]], "ok": true, "ms": 65, "cat": "Road", "credit": "Jacklee", "lic": "CC BY-SA 3.0"}, {"q": "Is everything in the photo good, or is at least one part defective?", "ctx": null, "ref": ["Defective"], "opts": [["Defective", 0.756], ["All good", 0.244]], "ok": true, "ms": 245, "cat": "Factory", "credit": "Amazon Science, VisA dataset", "lic": "CC BY 4.0"}, {"q": "Which numbered column contains the white ball? Choose its current column, from 1 on the left to 5 on the right. Ignore the orange paddle.", "ctx": null, "ref": ["Lane 4"], "opts": [["Lane 4", 0.9915], ["Lane 3", 0.0065], ["Lane 2", 0.0014], ["Lane 5", 0.0005], ["Lane 1", 0.0001]], "ok": true, "ms": 74, "cat": "Game", "credit": "Breakout from hr98w/jev-visual (MIT); scene from the game's own lane check", "lic": "MIT"}, {"q": "Is there a dog in the image?", "ctx": null, "ref": ["No"], "opts": [["No", 0.9955], ["Yes", 0.0045]], "ok": true, "ms": 53, "cat": "Is it there?", "credit": "Grendelkhan", "lic": "CC BY-SA 4.0"}, {"q": "What should happen to this expense?", "ctx": null, "ref": ["Review"], "opts": [["Review", 0.8872], ["Reject", 0.1071], ["Approve", 0.0058]], "ok": true, "ms": 87, "cat": "Receipt", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "How many green triangles are there?", "ctx": null, "ref": ["3"], "opts": [["2", 0.7028], ["3", 0.2716], ["4", 0.0141], ["1", 0.0079], ["5", 0.0024], ["6", 0.0008], ["7", 0.0004], ["8", 0.0001]], "ok": false, "ms": 117, "cat": "Counting", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "What happened to the payment?", "ctx": null, "ref": ["Declined"], "opts": [["Declined", 0.997], ["Pending", 0.0017], ["Paid", 0.0013]], "ok": true, "ms": 121, "cat": "Screen", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "What kind of thing is the object in the image?", "ctx": null, "ref": ["Animal"], "opts": [["Animal", 0.9515], ["Vehicle", 0.0179], ["Unclear", 0.0131], ["Harmless debris", 0.0044], ["Traffic light", 0.0037], ["Obstacle", 0.0029], ["Person", 0.0024], ["Other sign", 0.002], ["Speed limit sign", 0.0011], ["Stop sign", 0.0011]], "ok": true, "ms": 59, "cat": "Road", "credit": "Joselodos", "lic": "CC0"}, {"q": "Are any brown objects visible?", "ctx": null, "ref": ["Yes"], "opts": [["Yes", 0.9747], ["No", 0.0253]], "ok": true, "ms": 51, "cat": "CLEVR", "credit": "Johnson et al., CLEVR (2017)", "lic": "CC BY 4.0"}, {"q": "Is everything in the photo good, or is at least one part defective?", "ctx": null, "ref": ["All good"], "opts": [["Defective", 0.8694], ["All good", 0.1306]], "ok": false, "ms": 245, "cat": "Factory", "credit": "Amazon Science, VisA dataset", "lic": "CC BY 4.0"}, {"q": "Which quarter had the highest revenue?", "ctx": null, "ref": ["Q3"], "opts": [["Q3", 0.9997], ["Q4", 0.0002], ["Q2", 0.0001], ["Q1", 0.0]], "ok": true, "ms": 134, "cat": "Chart", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Is there a ball in the image?", "ctx": null, "ref": ["Yes"], "opts": [["Yes", 0.9948], ["No", 0.0052]], "ok": true, "ms": 52, "cat": "Is it there?", "credit": "Evgeniy Isaev", "lic": "CC BY 2.0"}, {"q": "What should the car do about the object in the image, which is on the road, in the car's lane, ahead of the car?", "ctx": null, "ref": ["Stop, then go"], "opts": [["Stop, then go", 0.9094], ["Stop", 0.0447], ["Wait for green", 0.0365], ["Slow down", 0.0026], ["Continue", 0.0025], ["Go", 0.0023], ["Change speed", 0.0021]], "ok": true, "ms": 76, "cat": "Road", "credit": "Dori", "lic": "Public domain"}, {"q": "How urgently does an on-call engineer need to act on this?", "ctx": null, "ref": ["High"], "opts": [["High", 0.8651], ["Medium", 0.1023], ["Low", 0.0326]], "ok": true, "ms": 76, "cat": "Screen", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "What does the fox eat?", "ctx": null, "ref": ["Rabbit"], "opts": [["Rabbit", 0.9997], ["Eagle", 0.0002], ["Grass", 0.0001]], "ok": true, "ms": 77, "cat": "Diagram", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Is the number of gray cubes greater than the number of large purple rubber cylinders?", "ctx": null, "ref": ["Yes"], "opts": [["Yes", 0.8139], ["No", 0.1861]], "ok": true, "ms": 48, "cat": "CLEVR", "credit": "Johnson et al., CLEVR (2017)", "lic": "CC BY 4.0"}, {"q": "Is there a wind turbine in the image?", "ctx": null, "ref": ["Yes"], "opts": [["Yes", 0.9955], ["No", 0.0045]], "ok": true, "ms": 53, "cat": "Is it there?", "credit": "Kiwiev", "lic": "CC0"}, {"q": "Is everything in the photo good, or is at least one part defective?", "ctx": null, "ref": ["All good"], "opts": [["All good", 0.9147], ["Defective", 0.0853]], "ok": true, "ms": 250, "cat": "Factory", "credit": "Amazon Science, VisA dataset", "lic": "CC BY 4.0"}, {"q": "What kind of thing is the object in the image?", "ctx": null, "ref": ["Harmless debris"], "opts": [["Other sign", 0.7298], ["Harmless debris", 0.1555], ["Unclear", 0.036], ["Speed limit sign", 0.0246], ["Vehicle", 0.0203], ["Stop sign", 0.0106], ["Obstacle", 0.01], ["Traffic light", 0.0076], ["Person", 0.0029], ["Animal", 0.0027]], "ok": false, "ms": 58, "cat": "Road", "credit": "Wald1siedel", "lic": "CC BY-SA 3.0"}, {"q": "Which channel brings the most traffic?", "ctx": null, "ref": ["Direct"], "opts": [["Direct", 0.9997], ["Social", 0.0001], ["Search", 0.0001], ["Ads", 0.0], ["Email", 0.0]], "ok": true, "ms": 132, "cat": "Chart", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Which element should the agent use next to reach the goal?", "ctx": null, "ref": ["Pay"], "opts": [["Pay", 0.9968], ["Card number", 0.0021], ["Expiry", 0.0011], ["Cancel", 0.0001], ["Email", 0.0]], "ok": true, "ms": 119, "cat": "Screen", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Is there a triangle in the image?", "ctx": null, "ref": ["No"], "opts": [["No", 0.9995], ["Yes", 0.0005]], "ok": true, "ms": 116, "cat": "Counting", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "What should the car do about the object in the image, which is on the road, in the car's lane, ahead of the car?", "ctx": null, "ref": ["Go", "Continue"], "opts": [["Go", 0.9619], ["Continue", 0.0221], ["Stop, then go", 0.0081], ["Wait for green", 0.005], ["Slow down", 0.0019], ["Stop", 0.0007], ["Change speed", 0.0005]], "ok": true, "ms": 65, "cat": "Road", "credit": "Jacklee", "lic": "CC BY-SA 3.0"}, {"q": "Is there an umbrella in the image?", "ctx": null, "ref": ["No"], "opts": [["No", 0.9369], ["Yes", 0.0631]], "ok": true, "ms": 52, "cat": "Is it there?", "credit": "Peter Miranda", "lic": "CC0"}, {"q": "The vertical axis starts at zero.", "ctx": null, "ref": ["No"], "opts": [["No", 0.9805], ["Yes", 0.0195]], "ok": true, "ms": 130, "cat": "Chart", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Is the big blue object the same shape as the large yellow object?", "ctx": null, "ref": ["Yes"], "opts": [["Yes", 0.9736], ["No", 0.0264]], "ok": true, "ms": 54, "cat": "CLEVR", "credit": "Johnson et al., CLEVR (2017)", "lic": "CC BY 4.0"}, {"q": "Is everything in the photo good, or is at least one part defective?", "ctx": null, "ref": ["All good"], "opts": [["All good", 0.8561], ["Defective", 0.1439]], "ok": true, "ms": 239, "cat": "Factory", "credit": "Amazon Science, VisA dataset", "lic": "CC BY 4.0"}, {"q": "What kind of thing is the object in the image?", "ctx": null, "ref": ["Harmless debris"], "opts": [["Harmless debris", 0.957], ["Unclear", 0.0264], ["Vehicle", 0.0055], ["Obstacle", 0.0045], ["Other sign", 0.0025], ["Person", 0.0019], ["Animal", 0.001], ["Traffic light", 0.0008], ["Stop sign", 0.0003], ["Speed limit sign", 0.0002]], "ok": true, "ms": 61, "cat": "Road", "credit": "Visviva", "lic": "CC0"}, {"q": "How urgently does an on-call engineer need to act on this?", "ctx": null, "ref": ["Low"], "opts": [["Low", 0.9273], ["Medium", 0.0562], ["High", 0.0165]], "ok": true, "ms": 76, "cat": "Screen", "credit": "RSI-Jev authors", "lic": "CC0 (generated)"}, {"q": "Is there a person in the image?", "ctx": null, "ref": ["No"], "opts": [["No", 0.9999], ["Yes", 0.0001]], "ok": true, "ms": 52, "cat": "Is it there?", "credit": "Ingolfson", "lic": "Public domain"}]</script>
+  </div>
+<!-- wall:end -->
+  </div>
+
+  <div class="block" id="defects">
+    <h3>Finds factory defects without seeing one.</h3>
+    <p class="lead">No defect examples, one photo at a time. You choose where to draw the line.</p>
+    <div class="tile defects" style="margin-top:var(--s4)" id="factory">
+      <div class="vbars"><div class="vr us"><span class="vn">RSI-Jev v4.0-VL, 2B</span><span class="vt"><i style="width:73.2%"></i></span><b>86.6</b></div><div class="vr"><span class="vn">Gemma 4 12B</span><span class="vt"><i style="width:65.8%"></i></span><b>82.9</b></div><div class="vr"><span class="vn">Jev-Omni (Gemma 4 12B + head)</span><span class="vt"><i style="width:62.2%"></i></span><b>81.1</b></div><div class="vaxis" aria-hidden="true"><span class="vn"></span><span class="vticks"><span style="left:0%">50</span><span style="left:20%">60</span><span style="left:40%">70</span><span style="left:60%">80</span><span style="left:80%">90</span><span style="left:100%">100</span></span><b></b></div></div>
+      <p class="cap" style="margin:0;text-align:left">AUROC on VisA: 50 is a coin flip, 100 is perfect. The same 2,162 photos of 12 kinds of parts for all three. Ours 95% CI 85.1–88.1; the other two are scored from their authors’ published predictions.</p>
+      <div class="fctl"><label for="thr">Flag a part as defective above</label><input type="range" id="thr" min="1" max="99" step="1" value="50"><output id="thr-out" for="thr">50%</output></div>
+      <div class="fstats">
+        <div class="fstat caught"><b><span id="f-caught">405</span><small>/ 1,200</small></b><span>defective parts caught</span></div>
+        <div class="fstat wrong"><b><span id="f-wrong">34</span><small>/ 962</small></b><span>good parts wrongly flagged</span></div>
+      </div>
+      <div class="fplot" id="fplot"><canvas id="fcanvas" role="img" aria-label="Dot plot of all 2,162 parts by probability of being defective, defective parts in one row and good parts in the other, with the cutoff line."></canvas></div>
+      <div class="flegend"><span><i style="background:var(--bad)"></i>defective part (1,200)</span><span><i style="background:var(--good)"></i>good part (962)</span><span>bright dots are flagged</span></div>
+    </div>
+    <p class="cap" style="margin-top:var(--s3)">Each dot is one photo’s served probability from the benchmark run behind the AUROC, recorded with v4.0-VL. Photos: VisA, Zou et al. 2022, CC BY 4.0. <a href="gallery.html">The full gallery, misses included</a>.</p>
+  </div>
+
+  <div class="block" id="play">
+    <div class="game">
+      <video id="bo-video" muted loop playsinline preload="metadata" poster="assets/v4/breakout-poster.webp" width="822" height="892" aria-label="Breakout played live by RSI-Jev v4.0-VL: the game board, and under it the five lane probabilities from the game’s own decision feed for each screenshot."><source src="assets/v4/breakout.webm" type="video/webm"><source src="assets/v4/breakout.mp4" type="video/mp4"></video>
+      <div><h3>It plays Breakout from pixels.</h3><p>Every frame it gets one screenshot and says which of five lanes the ball is in. The paddle moves there.</p><p class="cap">Recorded live with v4.0-VL at real speed: 79 ms per round trip, 200 decisions. Game from hr98w/jev-visual (MIT), unchanged.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="earlier">
+  <p class="eyebrow">Before that</p>
+  <h2>Four text releases in four days.</h2>
+  <p class="sub">On the same 15-benchmark suite: 0.622, 0.709, 0.736, then 0.756.</p>
+  <ol class="visual rel" reversed>
+    <li><a class="v" href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v3.0.md">v3.0</a><span class="d">Sep 28 · 2B</span><p>The first release where reinforcement learning helps. <span>It ranks the right memory first 60% more often than its supervised parent (R@1 0.192 → 0.308).</span></p></li>
+    <li><a class="v" href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v2.1.md">v2.1</a><span class="d">Sep 27 · 2B</span><p>Better everywhere it was checked. <span>Ahead of v1.0 on three benchmarks it never trained on.</span></p></li>
+    <li><a class="v" href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v2.0.md">v2.0</a><span class="d">Sep 26 · 2B</span><p>Trained on decision benchmarks’ train splits. <span>A confidence head rescales every answer without changing which option wins.</span></p></li>
+    <li><a class="v" href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v1.0.md">v1.0</a><span class="d">Sep 25 · 0.8B, 2B</span><p>One forward pass, a probability for every option. <span>The zero-shot reference every later release is compared against.</span></p></li>
+  </ol>
+</section>
+
+<section id="start">
+  <p class="eyebrow">Get started</p>
+  <h2>Three commands.</h2>
+  <p class="sub">Install it, serve v7.0-VL on your own GPU, and ask. Serve <code>v7.0-vl-3b</code> for the 3B, the 4B cut at layer 20; on a 96 GB GPU, <code>v6.1-vl-27b --effort auto</code> for the 27B.</p>
+  <div class="visual cmds">
+    <div class="cmd"><span class="k">1</span><div class="codebox"><button class="copy" type="button">Copy</button><pre><code>pip install "rsi-jev[fast,vision] @ git+https://github.com/Shanghua-Gao/RSI-Jev"</code></pre></div></div>
+    <div class="cmd"><span class="k">2</span><div class="codebox"><button class="copy" type="button">Copy</button><pre><code>rsi-jev serve v7.0-vl-4b --effort auto</code></pre></div></div>
+    <div class="cmd"><span class="k">3</span><div class="codebox"><button class="copy" type="button">Copy</button><pre><code>curl localhost:8000/v1/systemone -H 'Content-Type: application/json' -d '{
+  "state": [{"role": "user", "content": "I was charged twice. Please refund."}],
+  "questions": {"refund": {"type": "noul",
+    "instructions": "Does the user request a refund?"}}}'</code></pre></div></div>
+  </div>
+  <p class="cap" style="margin-top:var(--s4);font-size:15px">Already using Jev? Point your client at <code>http://localhost:8000</code>. For images, add an <code>images</code> list: <a href="https://github.com/Shanghua-Gao/RSI-Jev#quickstart">see the README</a>.</p>
+</section>
+
+</main>
+
+<footer>
+<div class="wrap">
+  <nav aria-label="Links">
+    <a href="https://github.com/Shanghua-Gao/RSI-Jev">GitHub</a>
+    <a href="https://huggingface.co/shgao">Hugging Face</a>
+    <a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/docs/inference.md">Docs</a>
+    <a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/versions/v7.0-vl.md">Release notes</a>
+    <a href="https://github.com/Shanghua-Gao/RSI-Jev/blob/main/EXPLORE.md">Every experiment</a>
+    <a href="gallery.html">Image gallery</a>
+  </nav>
+  <p>Thanks to <b>HP</b> and <b>NVIDIA</b> for providing the <b>HP ZGX Nano AI Station</b>, powered by the <b>NVIDIA GB10 Grace Blackwell Superchip</b>.</p>
+  <p>Code MIT · weights Apache-2.0; some image training sources are non-commercial, listed on each model card. Not affiliated with TypeSafe AI. Built by <a href="https://github.com/mims-harvard/AutoScientists">AutoScientists</a> · <a href="https://shgao.site">Shanghua Gao</a>.</p>
+</div>
+</footer>
+
+<script>
+(function () {
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var root = document.documentElement;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function watch(el, cb) {
+    var inView = !("IntersectionObserver" in window);
+    function upd() { cb(inView && !document.hidden); }
+    if (!inView) new IntersectionObserver(function (es) { inView = es[es.length - 1].isIntersecting; upd(); }, { threshold: 0.25 }).observe(el);
+    document.addEventListener("visibilitychange", upd);
+    upd();
+  }
+
+  /* theme */
+  var btn = document.getElementById("theme");
+  try { var th = localStorage.getItem("gal-theme"); if (th === "light" || th === "dark") root.dataset.theme = th; } catch (e) {}
+  if (btn) {
+    btn.hidden = false;
+    btn.addEventListener("click", function () {
+      var cur = root.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      root.dataset.theme = cur === "dark" ? "light" : "dark";
+      try { localStorage.setItem("gal-theme", root.dataset.theme); } catch (e) {}
+    });
+  }
+
+  /* effort: one control, one panel (numbers from versions/v6.0-vl.md) */
+  (function () {
+    var E = {
+      low:    { n: 16, layers: "16", ms: "23 ms", use: "Intent, routing, retrieval", why: "layer 16 is already as good as 32 here", note: "Stops after layer 16 for every question: <b>57%</b> of full latency." },
+      medium: { n: 20, layers: "20", ms: "27 ms", use: "Classification and judgement", why: "most of the gain comes by layer 20", note: "Stops after layer 20: the same Decision Index score as <b>high</b> at about 70% of the latency." },
+      high:   { n: 32, layers: "32", ms: "40 ms", use: "Knowledge, multi-step reasoning, code", why: "these keep improving to the last layer", note: "Runs all 32 layers for every question." },
+      auto:   { n: 0, layers: "16, 20 or 32", ms: "Varies", msl: "between medium and high", use: "Mixed traffic", why: "deeper only when unsure", note: "Answers at layer 16 when it is nearly sure, at 20 when it is sure enough, and at 32 otherwise." }
+    };
+    var seg = document.getElementById("seg"); if (!seg) return;
+    var btns = [].slice.call(seg.querySelectorAll("button")), strip = document.getElementById("strip"), cells = [];
+    for (var i = 0; i < 32; i++) { var c = document.createElement("i"); strip.appendChild(c); cells.push(c); }
+    function set(k, focus) {
+      var e = E[k];
+      btns.forEach(function (b) { var on = b.getAttribute("data-k") === k; b.setAttribute("aria-checked", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
+      document.getElementById("e-layers").textContent = e.layers;
+      document.getElementById("e-ms").textContent = e.ms;
+      document.getElementById("e-msl").textContent = e.msl || "median latency, one H200";
+      document.getElementById("e-use").textContent = e.use;
+      document.getElementById("e-why").textContent = e.why;
+      document.getElementById("e-note").innerHTML = e.note;
+      cells.forEach(function (c, j) {
+        var on = e.n ? j < e.n : j < 16;
+        c.className = on ? "on" : (!e.n ? "maybe" : "");
+      });
+    }
+    btns.forEach(function (b, i) {
+      b.addEventListener("click", function () { set(b.getAttribute("data-k")); });
+    });
+    seg.addEventListener("keydown", function (ev) {
+      var d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[ev.key]; if (d === undefined) return;
+      ev.preventDefault();
+      var cur = btns.findIndex(function (b) { return b.getAttribute("aria-checked") === "true"; });
+      set(btns[(cur + d + btns.length) % btns.length].getAttribute("data-k"), true);
+    });
+    set("auto");
+  })();
+
+  /* image wall: hover or tap for every option */
+  (function () {
+    var wall = document.getElementById("wall"); if (!wall) return;
+    var data; try { data = JSON.parse(document.getElementById("wall-data").textContent); } catch (e) { return; }
+    var tiles = [].slice.call(wall.querySelectorAll(".wt")), tip = document.getElementById("wall-tip");
+    function pct(p) { return p >= 0.99 ? Math.min(Math.round(p * 1000) / 10, 99.9).toFixed(1) + "%" : p < 0.01 ? "<1%" : Math.round(p * 100) + "%"; }
+    var cur = null, pinned = false;
+    function show(li, pin) {
+      var d = data[+li.getAttribute("data-i")]; if (!d) return;
+      var top = d.opts.slice(0, 5), rest = d.opts.length - top.length;
+      var h = '<span class="tag">' + esc(d.cat) + '</span><p class="tq">' + esc(d.q) + '</p>' + (d.ctx ? '<p class="vctx">' + esc(d.ctx) + '</p>' : "") + '<ul class="opts">';
+      top.forEach(function (o, k) { h += '<li class="opt' + (k === 0 ? " pick" : "") + '"><span class="ol">' + esc(o[0]) + '</span><span class="ob"><i style="--w:' + (100 * o[1]).toFixed(1) + '%"></i></span><span class="op">' + pct(o[1]) + "</span></li>"; });
+      if (rest > 0) h += '<li class="opt rest">+ ' + rest + " more " + (rest > 1 ? "answers" : "answer") + (d.opts[5][1] < 0.01 ? (rest > 1 ? ", each" : ",") + " under 1%" : "") + "</li>";
+      h += '</ul><p class="tf">' + (d.ok ? '<span class="y">✓ matches the reference</span>' : '<span class="n">✗ wrong: the reference is ' + esc(d.ref.join(" or ")) + "</span>") + "<span>" + d.ms + " ms on one GB10</span></p>";
+      if (d.credit) h += '<p class="tc">' + esc(d.credit) + (d.lic ? ", " + esc(d.lic) : "") + "</p>";
+      tip.innerHTML = h; tip.hidden = false;
+      if (cur && cur !== li) cur.classList.remove("open");
+      cur = li; pinned = !!pin; li.classList.add("open");
+      var w = wall.getBoundingClientRect(), r = li.getBoundingClientRect(), t = tip.getBoundingClientRect();
+      var x = r.left - w.left + r.width / 2 - t.width / 2; x = Math.max(4, Math.min(x, w.width - t.width - 4));
+      var below = r.bottom + t.height + 10 < window.innerHeight || r.top - t.height - 10 < 0;
+      tip.style.left = x + "px"; tip.style.top = (below ? r.bottom - w.top + 8 : r.top - w.top - t.height - 8) + "px";
+    }
+    function hide() { tip.hidden = true; if (cur) cur.classList.remove("open"); cur = null; pinned = false; }
+    var fine = window.matchMedia && matchMedia("(hover: hover)").matches;
+    tiles.forEach(function (li) {
+      var b = li.querySelector("button");
+      if (fine) { li.addEventListener("mouseenter", function () { if (!pinned) show(li); }); li.addEventListener("mouseleave", function () { if (!pinned) hide(); }); }
+      b.addEventListener("click", function (e) { e.stopPropagation(); if (cur === li && pinned) hide(); else show(li, true); });
+      b.addEventListener("focus", function () { if (!pinned) show(li); });
+      b.addEventListener("blur", function () { if (!pinned) hide(); });
+    });
+    document.addEventListener("click", function (e) { if (cur && !wall.contains(e.target)) hide(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && cur) hide(); });
+    window.addEventListener("resize", function () { if (cur) hide(); });
+    if (calm || !("IntersectionObserver" in window)) return;
+    var n = document.getElementById("wall-n"), total = tiles.length;
+    wall.classList.add("pre");
+    var order = tiles.map(function (_, i) { return i; }), seed = 7;
+    for (var i = order.length - 1; i > 0; i--) { seed = (seed * 9301 + 49297) % 233280; var j = Math.floor(seed / 233280 * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    n.textContent = "0";
+    var io = new IntersectionObserver(function (es) {
+      if (!es[es.length - 1].isIntersecting) return; io.disconnect();
+      var step = 1650 / total, k = 0;
+      (function next() {
+        if (k >= total) { setTimeout(function () { wall.classList.remove("pre"); tiles.forEach(function (li) { li.classList.remove("on"); }); }, 700); return; }
+        tiles[order[k]].classList.add("on"); k++; n.textContent = k;
+        setTimeout(next, step);
+      })();
+    }, { threshold: 0.3 });
+    io.observe(wall.querySelector(".wgrid"));
+  })();
+
+  /* factory defects: move the line (recorded VisA scores, v4.0-VL) */
+  (function () {
+    var VISA = {"p":[63108,563084,514583,493418,592506,620811,477231,527073,354330,541055,132838,426868,586924,432071,340054,107543,93694,73775,411515,109724,489352,515487,563570,498269,552479,464599,468100,416309,490249,431970,417609,98728,450657,120673,389905,67480,398775,98595,535843,241561,282948,358115,448011,408711,319554,450528,278180,108217,357292,289804,185489,92404,237238,340755,103795,307549,109308,333807,96118,219318,140661,475218,76004,590317,481822,514197,476468,477776,634737,386851,511049,540945,405485,408001,484159,478705,428663,466205,503055,477991,476076,502476,417073,548849,455271,272068,432133,266768,447246,453154,407273,182299,624779,495961,411126,52353,536233,552455,118519,163680,46631,40598,50392,62986,48305,55785,47171,70910,70111,49542,45869,48704,47749,57296,53501,280814,55558,48032,53519,42707,44904,158635,50826,79443,44639,182030,58107,45368,183122,83013,62894,63375,53840,62431,49066,49931,256590,49173,44404,57148,74617,43725,82018,55586,57521,91682,44008,90892,60820,89013,44233,74209,123638,47162,77139,46610,51102,335737,50304,60273,56040,57140,42011,38006,70687,50490,60645,44015,58333,61760,64242,52719,174249,64633,47780,51283,62301,83847,51287,52311,52989,43666,165233,41993,73150,64650,89850,50878,151846,49012,65199,68531,62199,84344,50122,54303,72996,100654,48328,87830,307329,368956,394083,358370,265421,352158,461068,448145,419830,577845,384959,194054,149485,192727,263188,482462,328732,567444,347160,310401,414215,509110,535868,456779,514484,464817,340839,260475,223223,315023,556404,352487,471422,418319,180606,438080,143808,475571,400043,507943,360286,429416,353668,392103,273532,677953,472628,675659,533413,503451,630612,637129,465665,519596,623683,603873,480912,350487,491563,381895,524329,423781,486150,484215,556105,306281,289644,368064,530540,152430,652432,591567,493758,428843,564899,301226,416451,380951,346125,559035,371169,304032,404932,377053,549789,442640,243056,152644,174836,467885,138019,320956,281630,303227,204775,287931,333049,317979,362782,189678,130150,115600,119818,129255,217202,148017,147652,151943,124624,146428,168449,179583,170640,195597,180944,259193,128739,95816,147055,146400,173006,139096,197723,188627,173847,165341,233225,127949,197892,136771,140878,147438,138816,254808,157917,253150,126334,124060,175118,209391,190017,170785,142031,207911,130077,133927,232524,288454,85293,130775,143951,199742,183982,271103,250586,114911,205880,212985,102544,159189,272741,104312,88053,110343,145966,135562,236253,378560,316068,116041,145432,114090,423258,225974,203125,149750,259545,475586,244164,232506,392861,102230,193004,378292,161414,241781,363830,218188,150650,421749,297699,570812,462549,614528,621296,482109,515460,551902,623586,476265,612339,510274,580264,431341,78746,74194,86757,113601,111484,96803,126464,71590,105073,85321,107569,91667,85914,163350,89030,274689,112967,129183,305789,142847,186348,419169,126717,92067,385075,123528,244408,288465,285182,122971,236399,117938,509974,223627,98046,88633,88812,94074,82622,112315,130330,89856,79494,94730,107652,87384,87638,91015,108121,118438,718528,522516,378401,196381,182674,521923,79472,97629,87639,88167,99582,122231,96214,105152,108659,100228,105551,93278,84311,106534,81153,110601,88552,92877,97428,103612,93111,87338,93984,109180,84411,99876,75920,74296,95139,98956,112919,87929,86171,101514,112589,87371,107984,83123,123902,141660,91724,77665,90646,107910,86340,86118,85940,99285,93487,77497,774512,764363,740839,640561,872298,818357,858672,759677,695433,866966,810699,789443,878276,761436,848728,857701,820179,797815,862698,804919,723140,783536,620602,636750,644120,579406,444856,609314,226577,592108,662985,212198,314790,311211,844304,569334,637711,569621,590359,409219,728788,628744,443177,743059,701849,795090,668294,772552,600665,730965,826855,761013,717806,746746,751709,810951,698699,746865,635513,767569,716015,861868,561454,824170,806382,544435,574682,477632,431119,692129,428944,442833,334611,288514,561097,572021,710426,702672,648907,763946,574637,712159,582940,620658,595361,563148,648356,663068,605979,526282,638021,512655,564212,835646,695288,607694,707612,701085,591230,733707,488225,320512,611390,425019,351918,653144,337428,561365,222882,363629,212008,251855,466492,422350,484027,530853,310840,546890,306047,461318,245943,515406,285286,266016,607024,331396,334543,636009,748854,311383,628806,272552,448228,213877,252626,471770,618349,346348,460537,251756,455555,275005,382138,785842,692143,719607,513293,473332,869403,678397,723296,685857,645499,735812,663343,699716,529785,468349,737896,777691,239005,657468,733366,562767,762795,652731,723799,595357,622297,629056,398856,438030,420589,396495,398146,440648,499933,308821,202866,567586,304021,546930,576649,313010,421222,364997,303405,545528,313071,532232,687061,392929,483022,728797,524419,692983,602886,290310,613385,796216,370247,778709,807187,787515,315163,703247,728633,698306,728969,702488,739030,471072,603246,510226,287706,615777,490323,780069,638022,718642,634507,617436,663022,534721,734756,692935,719356,505025,737274,413025,489462,325188,592023,428804,428388,466920,589970,303327,228390,434822,271804,346777,295997,299702,306971,249436,325542,245943,285622,278537,313839,211524,154028,283514,155543,213465,224262,247280,254086,239227,220812,258727,151323,273685,250297,221773,199017,281008,266210,225985,340871,307505,269851,270846,267506,270408,194769,231722,247197,227326,275332,213034,225543,206250,182701,287851,298316,213026,207410,260646,245144,195793,311919,436386,194348,266678,262924,358910,264118,227113,674548,185397,321793,384789,537091,597097,152726,283121,559268,640308,582369,556805,179691,606511,543346,501759,364983,121098,325559,306037,483648,488320,459748,486349,458855,340811,164053,461541,440270,382622,467745,499654,373793,394615,402742,407441,488412,432002,541351,536479,615409,493864,621838,488077,666606,577560,683571,705549,225395,562749,298659,259679,399012,294124,217574,530577,218088,281333,318233,353686,268146,251090,181772,190345,341343,360424,518669,453483,138735,437145,127242,489635,302951,509562,98180,317864,101975,422968,554607,529760,266630,134530,251569,501915,345369,179116,108423,66549,200287,279234,56081,78974,159103,98466,112054,117409,137578,129032,83207,150381,84616,99860,83893,81711,164446,42082,124322,110309,118400,79007,71036,103554,157424,91614,320646,88923,85628,213950,53314,71587,45482,72086,54637,121635,124701,75323,219477,92945,230616,74881,65101,203465,150782,73016,205805,47255,157077,75808,73411,74499,163828,123885,93126,151783,92165,97014,62091,85304,303116,151419,132564,70908,71091,186475,88934,133455,438677,88241,78662,555484,74945,56837,219371,69448,294021,264953,196773,74368,66202,68072,119536,135254,104685,96961,52146,150847,86710,102551,64514,92176,116564,362984,210055,102156,79314,198419,106970,129511,225049,125448,396630,97907,122516,94620,69902,98362,99605,74362,104610,40064,553886,720114,586677,417477,659052,502737,714131,450087,583057,465877,364571,394160,234865,671015,550080,420514,184709,490255,614295,539272,514244,557379,296802,208330,557584,312103,261203,178865,99175,398401,502636,442808,664391,518445,306074,441503,383841,573419,540699,666341,479339,278550,318316,460807,439625,498304,695002,433538,483760,581263,497790,270032,375247,270214,475405,620417,602925,495292,299266,506541,573433,527489,601411,494329,489876,375478,468755,407260,457349,409564,566118,636538,428109,531076,579756,380392,331128,409854,415838,410327,539489,567109,643202,242406,515729,335149,274172,316438,372345,555802,489094,285214,566952,230403,261960,442226,193398,259785,201515,531914,374800,292957,104397,290747,67944,108051,520030,287227,520927,72602,94938,256419,271364,144119,577337,378889,328386,169011,169282,133821,143317,521722,386997,530496,404938,543029,312011,419902,143103,395503,542157,595892,223535,322453,654540,251663,383485,553129,229464,360652,567261,553639,388751,389514,332661,340711,100957,399552,566631,207034,135582,433492,169163,430727,492041,325365,191591,199835,300633,230582,233596,507454,88741,702879,457934,283670,220606,289999,264183,312456,419092,272336,307335,198689,393915,468145,142601,134894,277411,395714,165179,271374,386682,297657,471969,67506,305132,96769,197016,344735,73543,217620,256540,400096,375136,246474,277978,156148,121904,131510,195433,173531,177619,145738,158790,229097,227999,198152,196384,200348,190136,221800,121156,198160,158289,204829,243766,226045,219200,222796,230804,344879,273960,179012,206783,162776,139144,185732,390557,401704,495984,213683,217032,217908,599219,146750,202500,223967,330301,304058,288142,211439,161173,195261,251441,199422,228757,158665,179485,214173,205361,162064,172327,277099,324237,282997,221249,177509,186441,208140,159417,250665,173441,387714,561571,323168,366289,165723,212805,660406,389323,548621,514247,476550,387899,446895,184295,408400,475573,389711,396658,287215,541853,205961,296712,170108,195208,244486,269981,243819,263980,269419,391955,306524,264655,180242,178073,397102,182785,167982,178502,193624,169805,173861,179160,172531,174454,150151,174505,188098,235153,188409,164439,208283,156409,205020,146843,214627,187765,212648,187989,207682,172557,157039,183644,155613,272378,186743,494085,188308,155521,171630,174981,174540,242905,199210,216971,207606,209623,184452,203469,161164,180474,193142,192789,193311,178624,166878,180733,153859,150175,168780,147302,176153,194719,178824,174148,195498,176082,191122,162659,187077,173563,167523,226851,146242,164967,216838,245181,136132,154995,162193,165228,160351,151451,169242,158147,159732,158655,181655,167455,177732,144479,155383,182529,164135,172394,170641,221227,191419,175683,155031,171733,203438,159314,165634,216388,162972,179161,181560,408256,598291,523181,220791,484169,188393,521829,665966,272595,324914,310725,558186,321361,260519,236486,589836,718624,282840,468987,669323,609094,762195,438482,374458,700876,657631,625023,537657,721260,421818,312202,213875,650264,632775,663170,177228,433060,533019,199246,490078,227922,371104,358930,294684,287974,286224,392589,242735,303472,224731,230473,213700,281178,226658,345445,304091,232571,266311,419050,203285,608670,746750,572662,409992,419180,575807,489322,588597,643357,290235,552379,625574,333749,335494,605356,499529,210225,387617,514739,540011,230622,532021,544661,238739,451829,367472,508984,295732,297307,357300,525905,315431,426143,278207,238218,396271,405256,415951,272454,340503,335923,328899,254745,330100,200350,241971,232754,234181,380810,220020,263630,410978,223761,203204,210137,220346,157621,274538,190641,233272,267976,208957,265570,211247,395428,201204,190480,335027,302045,287854,221325,163510,429745,347308,230567,262008,254201,235360,228990,402492,220272,214417,192221,190135,239816,336410,204126,385294,211603,213905,233279,346888,256628,342629,402913,214211,305931,177568,258775,303363,298136,191711,198469,228491,285641,162259,181958,272380,278486,312066,207322,214682,227190,204567,208127,267540,294007,291635,197760,200003,218849,219091,167768,200549,140728,153977,147908,196061,186932,259787,173436,176958,223794,224692,266046,131453,195415,157347,198855,170766,356439,301461,242615,236804,188972,335053,313986,301516,373230,263693,219202,402467,244161,292822,231386,248420,217103,251169,290432,266048,458150,297597,435372,336041,269703,541462,453274,742746,426263,658392,261923,246388,363334,492855,229438,265442,324203,232244,383506,668746,236162,273822,279894,175155,233985,225392,232071,357937,200113,252373,236201,251964,224562,200668,299842,302804,223994,237223,308834,257051,439567,256291,418499,242747,426333,594406,722821,702129,225751,274240,581828,317749,199838,246073,390528,646352,234033,699531,201861,211377,275474,644481,305315,217950,235817,285534,418423,241620,250826,613098,240699,447584,265900,372418,255962,251829,258392,260970,359470,207116,178980,242150,279843,218373,235956,233206,205670,205628,210664,251482,237023,214090,208235,263881,375167,240901,209297,263017,223552,189688,191435,218772,252715,215505,279676,266310,218921,242468,249089,213835,249880,204707,216749,244637,208146,225675,268176,212170,228292,223780,262392,252338,235522,200968,271619,202343,225689,221407,263303,246332,223343,236552,255410,239626,236021,231416,246097,207834,222920,266280,244818,232715,218232,230565,238535,240940,189415,205887,261646,200557,308604,223596,232132,286024,260802,236875,223730,224974,231760,258656,221066,270324,211902,278750,249810,234834,223050,229742,243885,216717,223015,249829,244968,283105,249272,242122,279452,311293,239758,222555,232057,609328,717353,523631,752046,749749,353221,621989,373534,755981,612936,521765,728302,311773,657759,598142,519770,728182,619265,731794,680266,680678,582759,614212,348103,560968,572996,600432,560029,640026,351167,635202,365413,363255,386950,501092,572852,631049,439927,232356,389528,433099,389127,388826,564365,267674,380993,249868,347053,360925,544226,431751,261230,345577,567856,261622,493845,461820,533871,581215,464391,454428,463681,486369,256233,432343,606315,362695,410344,533295,657273,538054,394383,389667,487470,349478,464017,375389,502162,530928,570704,427383,493600,504938,280166,495965,453924,394433,428650,357619,339291,222253,470559,449301,423467,371987,376894,359484,414367,351987,350032,143938,216350,380175,222988,209948,180773,214487,204210,162979,257762,193017,163521,185939,181071,220528,222573,157344,178212,198677,205730,171242,203277,175692,192510,171397,187429,208897,213894,147760,202002,158551,172291,228355,192798,209440,199524,156023,290240,182464,199504,176558,222062,183682,158278,170323,173033,189477,160968,198292,348269,219401,175041,218488,197876,279332,215562,272886,213701,226401,217268,220454,171932,271988,182569,250443,195892,208325,205005,157949,198695,183339,191895,241613,186393,198205,216724,243686,207366,167334,305355,190734,247758,196886,203803,212838,206186,256406,212886,267533,284317,186587,206760,363486,465995,200065,176583,411692,495488,210832,226661,323242,606488,437019,728762,571171,615775,468341,307650,704697,606603,263394,617159,409909,586789,478062,524108,618587,660698,463169,553499,660616,558886,605615,591979,822974,484225,549166,649522,508924,643367,383857,550393,513496,624195,503888,724525,498423,580002,493250,389223,531703,832460,778879,594517,645502,802432,784779,840417,721241,651199,878120,401590,452339,499541,484645,365114,478814,406886,516765,481683,455097,510692,249658,407328,365155,445839,433455,399501,398018,350985,335661,370442,875269,335632,447175,306289,466245,442862,459900,531185,736726,410416,412497,341162,365249,352183,380054,474644,505183,352843,383715,360533,200009,233223,238733,240509,451172,572743,204946,246486,190700,161349,227069,210075,458142,152994,317069,418119,277489,278662,132055,152414,221169,306907,184630,254691,188512,190734,596918,386888,273485,271392,220762,281449,210205,272501,229015,224405,286005,192747,298680,195160,235418,239293,206664,205745,222976,127849,277133,183739,207845,264744,347078,338919,263093,244662,157848,458362,175770,279263,251829],"d":"11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000"};
+    var box = document.getElementById("factory"); if (!box) return;
+    var P = VISA.p, L = VISA.d, N = P.length, thr = 50;
+    var input = document.getElementById("thr"), out = document.getElementById("thr-out"), cv = document.getElementById("fcanvas"), plot = document.getElementById("fplot");
+    var jit = new Float32Array(N), s = 12345;
+    for (var i = 0; i < N; i++) { s = (s * 1103515245 + 12345) % 2147483648; jit[i] = s / 2147483648; }
+    function fmt(n) { return n.toLocaleString("en-US"); }
+    function update() {
+      var cut = thr * 10000, c = 0, w = 0;
+      for (var i = 0; i < N; i++) if (P[i] > cut) { if (L.charCodeAt(i) === 49) c++; else w++; }
+      document.getElementById("f-caught").textContent = fmt(c); document.getElementById("f-wrong").textContent = fmt(w);
+      out.textContent = thr + "%"; input.value = thr;
+      input.setAttribute("aria-valuetext", thr + "%: catches " + c + " of 1,200 defects, flags " + w + " of 962 good parts");
+      draw();
+    }
+    function draw() {
+      var cs = getComputedStyle(root), col = function (n) { return cs.getPropertyValue(n).trim(); };
+      var W = cv.clientWidth, H = cv.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+      if (!W) return;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      var g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+      var pl = 6, pr = 6, x = function (p) { return pl + p / 1e6 * (W - pl - pr); }, tx = x(thr * 10000);
+      var rows = [[10, 66], [80, 136]], axis = 146;
+      g.fillStyle = col("--raise"); g.fillRect(tx, 2, W - pr - tx, axis - 4);
+      g.font = "500 12px " + col("--mono"); g.textBaseline = "top"; g.fillStyle = col("--muted");
+      g.textAlign = "right"; g.fillText("defective", W - pr - 4, rows[0][0] + 2); g.fillText("good", W - pr - 4, rows[1][0] + 2);
+      var bad = col("--bad"), good = col("--good"), r = W < 500 ? 1.3 : 1.7;
+      for (var pass = 0; pass < 2; pass++) for (var i = 0; i < N; i++) {
+        var d = L.charCodeAt(i) === 49, on = P[i] > thr * 10000; if (on !== (pass === 1)) continue;
+        var row = rows[d ? 0 : 1], y = row[0] + 6 + jit[i] * (row[1] - row[0] - 12);
+        g.globalAlpha = on ? 0.95 : 0.22; g.fillStyle = d ? bad : good;
+        g.beginPath(); g.arc(x(P[i]), y, r, 0, 6.2832); g.fill();
+      }
+      g.globalAlpha = 1; g.strokeStyle = col("--line"); g.lineWidth = 1; g.beginPath(); g.moveTo(pl, axis + 0.5); g.lineTo(W - pr, axis + 0.5); g.stroke();
+      g.fillStyle = col("--muted"); g.textBaseline = "top";
+      [0, 25, 50, 75, 100].forEach(function (v, k) { g.textAlign = k === 0 ? "left" : k === 4 ? "right" : "center"; g.fillText(v + "%", x(v * 10000), axis + 6); });
+      g.strokeStyle = col("--accent"); g.lineWidth = 2; g.beginPath(); g.moveTo(tx, 2); g.lineTo(tx, axis); g.stroke();
+    }
+    input.addEventListener("input", function () { thr = +input.value; update(); });
+    function fromX(e) { var b = cv.getBoundingClientRect(); var v = Math.round((e.clientX - b.left - 6) / (b.width - 12) * 100); thr = Math.max(1, Math.min(99, v)); update(); }
+    var drag = false;
+    plot.addEventListener("pointerdown", function (e) { drag = true; try { plot.setPointerCapture(e.pointerId); } catch (_) {} fromX(e); });
+    plot.addEventListener("pointermove", function (e) { if (drag) fromX(e); });
+    ["pointerup", "pointercancel"].forEach(function (k) { plot.addEventListener(k, function () { drag = false; }); });
+    if ("ResizeObserver" in window) new ResizeObserver(function () { draw(); }).observe(cv); else window.addEventListener("resize", draw);
+    if (window.matchMedia) matchMedia("(prefers-color-scheme: light)").addEventListener("change", draw);
+    new MutationObserver(draw).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    update();
+  })();
+
+  /* Breakout: play only while visible; never autoplay under reduced motion */
+  (function () {
+    var v = document.getElementById("bo-video"); if (!v) return;
+    if (calm) { v.controls = true; return; }
+    watch(v, function (on) { if (on) { var p = v.play(); if (p && p.catch) p.catch(function () { v.controls = true; }); } else v.pause(); });
+  })();
+
+  /* copy buttons */
+  function sel(n) { var r = document.createRange(); r.selectNodeContents(n); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  document.querySelectorAll(".copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var code = b.parentElement.querySelector("code"), text = code.textContent;
+      var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1400); };
+      try { navigator.clipboard.writeText(text).then(done, function () { sel(code); }); } catch (e) { sel(code); }
+    });
+  });
+
+  /* gentle reveal as each screen scrolls in */
+  if (calm || !("IntersectionObserver" in window)) return;
+  var vh = window.innerHeight;
+  var els = [].slice.call(document.querySelectorAll("section:not(.hero) > *, .block > *")).filter(function (el) { return !el.classList.contains("block") && el.getBoundingClientRect().top > vh; });
+  els.forEach(function (el) { el.classList.add("rv"); });
+  root.classList.add("rv-on");
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.01 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>

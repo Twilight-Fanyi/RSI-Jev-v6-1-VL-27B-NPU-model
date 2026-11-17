@@ -1,0 +1,1 @@
+{"shape": [62, 5120], "mean": -0.05891253799200058, "std": 2.0161848068237305, "finite": true, "tensor_path": "/workspace/jev-adaptation/model-44/service-out/service-hidden.pt"}
