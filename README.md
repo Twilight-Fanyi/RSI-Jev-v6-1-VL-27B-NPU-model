@@ -49,6 +49,8 @@ The four routes and complete option maps are evidenced by [`evidence/C-http-serv
 
 Three real terminal evidence images are included under [`assets/`](assets/). The remote model-44 run did not contain PNG captures, so these are verbatim copies of existing real terminal evidence from the same OpenLibing vLLM-Ascend decision-service campaign (remote model-102); model-44-specific claims must be checked against the model-44 JSON/log evidence above.
 
+The machine-readable release record is [`MODEL_MANIFEST.json`](MODEL_MANIFEST.json).
+
 ## Source and evidence layout
 
 - `service_adapter.py`, `service_runtime.py`, `inference.py`, `start.sh`: model-44 resident adapter and transport.

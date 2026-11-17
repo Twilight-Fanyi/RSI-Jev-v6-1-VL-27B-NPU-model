@@ -1,0 +1,57 @@
+{
+  "package_schema": "npu-adapter/1",
+  "model_index": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "repo_id": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "source_snapshot": {
+    "repo": "https://github.com/Shanghua-Gao/RSI-Jev.git",
+    "commit": "e58526f061afd4c383d33a22b309b888f8a3e3c7"
+  },
+  "runtime": {
+    "vllm_ascend": "0.30.0",
+    "cann": "9.2.1",
+    "soc": "Ascend910/A3",
+    "dtype": "bfloat16",
+    "loader_tensor_parallel": 2,
+    "service_tensor_parallel": 1,
+    "tokenizer": "source-audit/"
+  },
+  "weights": {
+    "included": false,
+    "manifest": "lfs-manifest.json",
+    "required_external_files": [
+      "tower.safetensors",
+      "visual.safetensors",
+      "scorer.safetensors",
+      "aux_scorers.safetensors",
+      "calibration.safetensors"
+    ]
+  },
+  "evidence": {
+    "real_decision": "evidence/C-real-decision-ready.json",
+    "http_service": "evidence/C-http-service.log",
+    "precision_replay": "evidence/C-http-precision.json",
+    "max_absolute_probability_delta": 0.0,
+    "delta_interpretation": "CPU scorer replay over the captured NPU hidden state; not independent CPU tower inference",
+    "official_baseline": "pending"
+  },
+  "assets": {
+    "terminal-health.png": {
+      "source": "remote model-102/assets/agent_workflow.png",
+      "model44_specific": false
+    },
+    "terminal-routes.png": {
+      "source": "remote model-102/assets/npu_device_call.png",
+      "model44_specific": false
+    },
+    "terminal-precision.png": {
+      "source": "remote model-102/assets/model_result.png",
+      "model44_specific": false
+    }
+  },
+  "hash_receipts": {
+    "remote_source": "evidence/REMOTE-SOURCE-SHA256SUMS.txt",
+    "package": "evidence/PACKAGE-SHA256SUMS.txt"
+  }
+}
