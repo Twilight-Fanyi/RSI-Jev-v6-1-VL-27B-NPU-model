@@ -49,6 +49,12 @@ The four routes and complete option maps are evidenced by [`evidence/C-http-serv
 
 Three model-44-specific terminal captures are included under `assets/`: NPU health and resident vLLM-Ascend process, all four HTTP routes, and NPU/CPU scorer-replay parity with the evidence SHA. They were captured from the live remote VS Code code-server terminal while model-44 was running on openlibing-vllm8 chip 1. The older model-102 captures remain quarantined under [`evidence/legacy-model102-assets/`](evidence/legacy-model102-assets/) and are not used as submission assets.
 
+![Live NPU health and resident vLLM-Ascend process](assets/agent_workflow.png)
+
+![Four HTTP route checks](assets/npu_device_call.png)
+
+![CPU/NPU scorer parity and source SHA](assets/model_result.png)
+
 The machine-readable release record is [`MODEL_MANIFEST.json`](MODEL_MANIFEST.json).
 
 ## Source and evidence layout
