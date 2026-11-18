@@ -1,0 +1,5 @@
+/workspace/jev-adaptation/model-44/weights/aux_scorers.safetensors 1531259664 11448760477
+/workspace/jev-adaptation/model-44/weights/calibration.safetensors 349008 11448760478
+/workspace/jev-adaptation/model-44/weights/scorer.safetensors 765629768 11448760476
+/workspace/jev-adaptation/model-44/weights/tower.safetensors 51249295504 11448760474
+/workspace/jev-adaptation/model-44/weights/visual.safetensors 921492896 11448760475

@@ -1,0 +1,47 @@
+{
+  "model_index": 44,
+  "timestamp_utc": "2026-11-17T19:56:46.950886+00:00",
+  "repo": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "files": {
+    "tower.safetensors": {
+      "path": "/workspace/jev-adaptation/model-44/weights/tower.safetensors",
+      "expected_size": 51249295504,
+      "actual_size": 51249295504,
+      "expected_sha256": "a56c5dba9ddd78fedc9694e4ea69161151117b411613559652e00f657c651855",
+      "size_match": true
+    },
+    "visual.safetensors": {
+      "path": "/workspace/jev-adaptation/model-44/weights/visual.safetensors",
+      "expected_size": 921492896,
+      "actual_size": 921492896,
+      "expected_sha256": "3c91804ce37b555c14181c78f8a4070b419ade68132bebe2cd753a2be56742f7",
+      "size_match": true
+    },
+    "scorer.safetensors": {
+      "path": "/workspace/jev-adaptation/model-44/weights/scorer.safetensors",
+      "expected_size": 765629768,
+      "actual_size": 765629768,
+      "expected_sha256": "a937caaa3d7fd867f8fce2d0928d91ffcdecf6db0cd10d514c7ee53466b66f55",
+      "size_match": true
+    },
+    "aux_scorers.safetensors": {
+      "path": "/workspace/jev-adaptation/model-44/weights/aux_scorers.safetensors",
+      "expected_size": 1531259664,
+      "actual_size": 1531259664,
+      "expected_sha256": "318a3029dc78af39795198e3fa01c9f8cfbd563daa4c92bf5ec3cb27a608d4ef",
+      "size_match": true
+    },
+    "calibration.safetensors": {
+      "path": "/workspace/jev-adaptation/model-44/weights/calibration.safetensors",
+      "expected_size": 349008,
+      "actual_size": 349008,
+      "expected_sha256": "9d29a1871b2262cb7b68d81883ec0188c891231e3ae1c28a9535f0e952185544",
+      "size_match": true
+    }
+  },
+  "all_size_match": true,
+  "official_lfs_sha_manifest": "/workspace/jev-adaptation/model-44/lfs-manifest.json",
+  "sha_marker": "/workspace/jev-adaptation/model-44/weights/ALL_SHA256_VERIFIED",
+  "sha_scope": "Official LFS SHA marker and prior full verification retained; this blocker turn rechecked current sizes only; no duplicate 52GB rehash started while model-170 occupies both NPUs."
+}

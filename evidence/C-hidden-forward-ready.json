@@ -1,0 +1,68 @@
+{
+  "model_id": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "checked_at": "2026-11-17T22:22:53+08:00",
+  "host": "openlibing-vllm8",
+  "runtime": "vLLM 0.30.0 + vLLM-Ascend (CANN 9.2.1), Ascend910 chip1",
+  "probe": {
+    "tensor_parallel_size": 1,
+    "dtype": "bfloat16",
+    "max_model_len": 128,
+    "prompt_token_ids": [
+      0,
+      0,
+      0
+    ],
+    "max_tokens": 1,
+    "generated_token_ids": [
+      0
+    ],
+    "generated_text": "",
+    "status": "GENERATE_OUTPUT"
+  },
+  "native_profile": "init engine (profile, create kv cache, warmup model) completed; KV cache initialized",
+  "hidden_capture": {
+    "patch": "Qwen3NextModel.forward hook enabled only under JEV_CAPTURE_HIDDEN=1; samples first 4096 values, max 8 records",
+    "file": "evidence/C-hidden-states2.jsonl",
+    "records": [
+      {
+        "shape": [
+          128,
+          5120
+        ],
+        "mean": 0,
+        "std": 0,
+        "finite": true,
+        "note": "vLLM profile/dummy padded pass"
+      },
+      {
+        "shape": [
+          3,
+          5120
+        ],
+        "mean": 0.0006673187017440796,
+        "std": 1.9382100105285645,
+        "finite": true,
+        "note": "real prompt-token generate forward"
+      }
+    ],
+    "real_forward_record": true
+  },
+  "scorer_status": "scorer.safetensors and aux_scorers mapped; standalone scorer/head smoke passes finite masked probabilities; hidden-state and option-span adapter contract present",
+  "option_span_status": "span contract implemented from rsijev encode.py; probe uses raw token IDs and does not yet build real option spans",
+  "acceptance_status": "pending",
+  "missing_acceptance": [
+    "real option-span tokenization from task JSON",
+    "typed scorer invocation on captured hidden states",
+    "/health /v1/decide/info /v1/systemone /v1/decide HTTP routes",
+    "complete probability schema and precision comparison"
+  ],
+  "evidence": {
+    "log": "evidence/C-hidden-generate3.log",
+    "log_sha256": "e0472d0bb8fa6288b5b6a2f7c20015d3505e7826a5a363b70bf476964535d858",
+    "hidden": "evidence/C-hidden-states2.jsonl",
+    "hidden_sha256": "edf897ad3a41fbc1d97ee24bd86267b585b745f41ba6da8cab1e22b8a9fabd29",
+    "sha256_manifest": "evidence/C-hidden-generate3.sha256"
+  },
+  "next_action": "feed real encoded option spans and decision index into hidden_state_adapter, invoke scorer and expose four routes; do not mark complete until probabilities/precision pass"
+}

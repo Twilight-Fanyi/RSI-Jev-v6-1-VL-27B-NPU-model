@@ -1,0 +1,15 @@
+{
+  "model_id": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "checked_at": "2026-11-17T22:12:00+08:00",
+  "host": "openlibing-vllm8",
+  "attempt": "JEV_CAPTURE_HIDDEN=1 run-generate-chip1.sh -> probe-generate.py using prompt_token_ids [0,0,0], max_tokens=1",
+  "hook_status": "Qwen3NextModel.forward patch loaded in parent and engine worker (log markers at lines 16,69,73)",
+  "loader_status": "weights loaded 51.0866 GiB; prior native loader/profile success",
+  "result": "no GENERATE_OUTPUT and C-hidden-states.jsonl remained empty; process exited after encoder-cache initialization",
+  "competing_process": "model-139/inference.py PID362034 + VLLM::EngineCore PID362394 started on chip1 during/after probe; HBM competition",
+  "log": "evidence/C-hidden-generate.log",
+  "next_action": "wait until chip1 is free; rerun with reduced hidden sample hook and capture C-hidden-states.jsonl plus GENERATE_OUTPUT",
+  "acceptance_status": "pending",
+  "no_claim": "does not count as real option-span/hidden-state or four-route acceptance"
+}

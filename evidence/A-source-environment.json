@@ -1,0 +1,18 @@
+{
+  "model_index": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B (effort auto)",
+  "timestamp_utc": "2026-11-17T19:56:46.950886+00:00",
+  "repo": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "config": {
+    "architectures": [
+      "Qwen3_5ForConditionalGeneration"
+    ],
+    "model_type": "qwen3_5",
+    "transformers_version": "5.8.0.dev0"
+  },
+  "source_dir": "/workspace/jev-adaptation/model-44/source-audit",
+  "environment_evidence": "/workspace/jev-adaptation/model-44/evidence/A-runtime-versions.txt",
+  "npu_evidence": "/workspace/jev-adaptation/model-44/evidence/A-npu-smi.txt",
+  "status": "pinned_source_config_and_environment"
+}

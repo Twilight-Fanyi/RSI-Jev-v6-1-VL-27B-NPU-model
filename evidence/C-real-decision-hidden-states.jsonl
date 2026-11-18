@@ -1,0 +1,2 @@
+{"shape": [128, 5120], "mean": 0.0, "std": 0.0, "finite": true}
+{"shape": [45, 5120], "mean": -0.05891253799200058, "std": 2.0161848068237305, "finite": true, "tensor_path": "/workspace/jev-adaptation/model-44/evidence/C-real-decision-hidden.pt"}

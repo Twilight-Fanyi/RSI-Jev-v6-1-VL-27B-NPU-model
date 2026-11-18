@@ -1,0 +1,28 @@
+{
+  "model_index": 44,
+  "model": "RSI-Jev v6.1 VL 27B",
+  "status": "blocked_screenshot_capture",
+  "real_run": {
+    "host": "openlibing-vllm8",
+    "device": "Ascend910 chip1",
+    "backend": "vLLM-Ascend 0.30.0",
+    "service_port": 18143,
+    "routes_log": "evidence/C-capture44-routes.txt",
+    "loader_log": "evidence/C-capture44.log"
+  },
+  "blocker": {
+    "reason": "The local Mac was locked during the capture attempt; native screencapture returned 'could not create image from rect'.",
+    "required_action": "Unlock the Mac and capture three fresh terminal-only PNGs from the model-44 run before submission.",
+    "screenshot_command_result": "could not create image from rect"
+  },
+  "excluded_assets": {
+    "reason": "The prior three PNGs were verbatim captures from remote model-102 and are not model-44 evidence; they were moved out of assets/.",
+    "directory": "evidence/legacy-model102-assets",
+    "sha256_manifest": "evidence/legacy-model102-assets/SHA256SUMS.txt"
+  },
+  "baseline": {
+    "official_adaptation_baseline": "not published in public competition rules",
+    "upstream_reference_only": "Decision Index 0.3 public set 65.64; held-out 0.808",
+    "use_as_acceptance": false
+  }
+}

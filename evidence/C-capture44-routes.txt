@@ -1,0 +1,12 @@
+MODEL=RSI-Jev v6.1 VL 27B
+HOST=openlibing-vllm8
+DEVICE=Ascend910 chip1
+BACKEND=vLLM-Ascend 0.30.0
+--- /health ---
+{"status": "ready", "model": "shgao/rsi-jev-v6.1-vl-27b", "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0"}
+--- /v1/decide/info ---
+{"model": "shgao/rsi-jev-v6.1-vl-27b", "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0", "model_name": "RSI-Jev v6.1 VL 27B", "backend": "vLLM-Ascend", "architecture": "Qwen3_5ForConditionalGeneration", "dtype": "bfloat16", "tensor_parallel_size": 1, "decision_types": ["noul", "choice", "score"], "probabilities": "full calibrated option probability map", "weights": "original pinned safetensors", "protocol_version": "systemone-compatible/local-1", "cache": {"enabled": false, "response_cache": false, "scope": "HTTP response caching", "adapter": {}}, "endpoints": ["/health", "/v1/decide/info", "/v1/systemone", "/v1/decide"]}
+--- /v1/systemone ---
+{"model": "shgao/rsi-jev-v6.1-vl-27b", "answers": {"keep_file": {"probabilities": {"yes": 0.5193452835083008, "no": 0.4806547164916992}, "choice": "yes", "decision": "yes"}, "department": {"probabilities": {"billing": 0.3536679744720459, "technical": 0.32673102617263794, "other": 0.3196009695529938}, "choice": "billing", "decision": "billing"}, "urgency": {"probabilities": {"Routine": 0.32877302169799805, "Urgent": 0.32547393441200256, "Emergency": 0.3457530438899994}, "choice": "Emergency", "decision": "Emergency", "score": "Emergency"}}, "usage": {"output_tokens": 0}, "request_id": "17d507eb5ee940569e67ecfee6f4caf2"}
+--- /v1/decide ---
+{"model": "shgao/rsi-jev-v6.1-vl-27b", "answers": {"decision": {"probabilities": {"billing": 0.34969666600227356, "technical": 0.32640936970710754, "other": 0.32389405369758606}, "choice": "billing", "decision": "billing"}}, "usage": {"output_tokens": 0}, "probabilities": {"billing": 0.34969666600227356, "technical": 0.32640936970710754, "other": 0.32389405369758606}, "choice": "billing", "decision": "billing", "choice_index": 0, "request_id": "152fcf4484c740248ae482b346ab9d2d"}

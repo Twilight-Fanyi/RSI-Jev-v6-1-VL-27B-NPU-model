@@ -1,0 +1,17 @@
+{
+  "model_id":44,
+  "checked_at":"2026-11-17T23:09:52+08:00",
+  "host":"openlibing-vllm8",
+  "runtime":"vLLM-Ascend TP1, CANN 9.2.1, Ascend910 chip1",
+  "prompt":{"input_len":45,"options":["yes","no"],"option_span_start":[21,31],"option_span_end":[31,42],"decision_index":44,"generated_token_ids":[0]},
+  "hidden":{"shape":[1,45,5120],"real_record_shape":[45,5120],"finite":true,"source":"C-real-decision-hidden.pt"},
+  "scorer_calibrated":{
+    "main_exit64_probabilities":[[0.5154476761817932,0.4845523238182068]],
+    "aux48_probabilities":[[0.5145148038864136,0.48548516631126404]],
+    "aux56_probabilities":[[0.5041503310203552,0.4958496689796448]],
+    "probability_sums":[1.0,1.0,1.0],"finite":true
+  },
+  "status":"real_tokenizer_npu_hidden_main_aux48_aux56_calibrated_replay",
+  "missing_acceptance":["HTTP /health /v1/decide/info /v1/systemone /v1/decide","precision comparison against baseline/official samples","task-specific output semantics beyond this yes/no probe"],
+  "evidence":["evidence/C-real-decision-npu.log","evidence/C-real-decision-encoding.json","evidence/C-real-decision-hidden.pt","evidence/C-real-decision-scorer.log"]
+}

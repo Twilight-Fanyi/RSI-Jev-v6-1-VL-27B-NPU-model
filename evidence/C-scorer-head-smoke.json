@@ -1,0 +1,22 @@
+{
+  "model_index": 44,
+  "status": "typed_scorer_weight_mapping_ready_hidden_state_contract_pending",
+  "runtime": "vLLM-Ascend 0.30.0 / Ascend910 / Python3.12",
+  "weights": {
+    "scorer": "765629768 bytes, SHA256 a937caaa3d7fd867f8fce2d0928d91ffcdecf6db0cd10d514c7ee53466b66f55",
+    "aux_scorers": "1531259664 bytes, SHA256 318a3029dc78af39795198e3fa01c9f8cfbd563daa4c92bf5ec3cb27a608d4ef",
+    "calibration": "349008 bytes, loaded with 8 tensors"
+  },
+  "module": "/workspace/jev-adaptation/model-44/native-plugin/jev_scorer.py",
+  "module_sha256": "see sibling sha256sum in evidence log",
+  "architecture": "option_xattn, 4 heads, sum combine, hidden=5120",
+  "loaded_heads": ["main", "48", "56"],
+  "synthetic_smoke": {
+    "shape": [2, 5],
+    "complete_probability_sums": [[1.0, 1.0], [0.9999999403953552, 1.0]],
+    "masked_slots": "-inf",
+    "finite_logits": true
+  },
+  "limitation": "No native vLLM request path currently exposes the model final hidden state plus option spans; therefore this module is weight-verified and executable but not yet bound into four HTTP routes. Existing model170 occupies both NPUs; no process was stopped.",
+  "next_action": "Bind vLLM hidden-state capture and option-span encoder, then run native four-route precision comparison when an A3 lane is free."
+}

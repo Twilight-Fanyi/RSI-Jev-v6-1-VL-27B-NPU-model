@@ -1,0 +1,36 @@
+{
+  "model_index": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B (effort auto)",
+  "timestamp_utc": "2026-11-17T19:59:50.874514+00:00",
+  "status": "released_blocked_native_namespace_and_resource",
+  "current_stage": "F_evidence_complete_blocked_root_audit_ready",
+  "claim_token": "m44-luna_vllm8-r2",
+  "verified": [
+    "pinned source revision d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+    "five official LFS weight entries with current sizes exact",
+    "vLLM 0.30.0 + torch_npu 2.10.0.post7 + CANN 9.2.1 import/plugin activation",
+    "first native loader error preserved before API bind",
+    "competition-format start.sh/inference.py/README retained"
+  ],
+  "blocked": [
+    "Qwen3_5 loader cannot map custom tower checkpoint namespace: no module/parameter layers in AscendQwen3_5ForConditionalGeneration",
+    "model-170 reserved TP2 service occupied both NPUs; no second load performed"
+  ],
+  "not_claimed": [
+    "D four HTTP routes",
+    "E precision/probability",
+    "terminal PNGs"
+  ],
+  "evidence": [
+    "/workspace/jev-adaptation/model-44/evidence/A-source-environment.json",
+    "/workspace/jev-adaptation/model-44/evidence/A-runtime-versions.txt",
+    "/workspace/jev-adaptation/model-44/evidence/A-npu-smi.txt",
+    "/workspace/jev-adaptation/model-44/evidence/B-weight-manifest.json",
+    "/workspace/jev-adaptation/model-44/evidence/C-native-blocker.json",
+    "/workspace/jev-adaptation/model-44/evidence/C-first-error.log",
+    "/workspace/jev-adaptation/model-44/start.sh",
+    "/workspace/jev-adaptation/model-44/inference.py",
+    "/workspace/jev-adaptation/model-44/README.md"
+  ],
+  "release_reason": "No truthful native engine/API/precision evidence possible after first loader namespace error; release claim and preserve artifacts"
+}

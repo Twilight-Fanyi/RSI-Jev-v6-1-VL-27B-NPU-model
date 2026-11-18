@@ -1,0 +1,48 @@
+{
+  "model_index": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "timestamp_utc": "2026-11-17T20:30:03.165117+00:00",
+  "host": "openlibing-vllm8",
+  "status": "released_blocked_wrapper_verified",
+  "blocker": "native loader namespace mapping failure and reserved NPU resource; native launch intentionally not retried",
+  "original_launcher_preserved": true,
+  "files": {
+    "start.native-original.sh": {
+      "exists": true,
+      "size_bytes": 972,
+      "sha256": "eb291358a95e7021619786927d43f9486c0ac26d36571403a7a1526c384c6ade"
+    },
+    "start.sh": {
+      "exists": true,
+      "size_bytes": 1244,
+      "sha256": "bd7a7adb60033c8252a8b28eb5d79f430b4d2256723f416a91a2ab7ea78aff04"
+    },
+    "inference.py": {
+      "exists": true,
+      "size_bytes": 1443,
+      "sha256": "ba431f295e235bda4194ec2b4707bb9df3731e3720813bd15c35002aea91bfce"
+    }
+  },
+  "wrapper_validation": {
+    "start_command": "bash /workspace/jev-adaptation/model-44/start.sh --model-dir /workspace/jev-adaptation/model-44 --output-dir /workspace/jev-adaptation/model-44/logs",
+    "start_exit_code": 2,
+    "start_stdout": "",
+    "start_stderr": "model-44 RSI-Jev v6.1 VL 27B is BLOCKED before native vLLM-Ascend startup.\nnative loader namespace mapping failure (There is no module or parameter named layers) and reserved NPU resource; native launch is intentionally not retried.\nThe original launcher is preserved as start.native-original.sh and is not executed by this entrypoint.\nC/D/E evidence is not extended: no service, four-route HTTP, or precision/probability run was performed.\nEvidence: /workspace/jev-adaptation/model-44/evidence/C-native-blocker.json; /workspace/jev-adaptation/model-44/evidence/C-first-error.log; /workspace/jev-adaptation/model-44/evidence/F-blocker.json\nmodel_dir=/workspace/jev-adaptation/model-44 output_dir=/workspace/jev-adaptation/model-44/logs\n",
+    "inference_command": "python3 /workspace/jev-adaptation/model-44/inference.py --model-dir /workspace/jev-adaptation/model-44 --output-dir /workspace/jev-adaptation/model-44/logs",
+    "inference_exit_code": 2,
+    "inference_stdout": "{\"canonical_sha256\": \"not_promoted\", \"evidence\": [\"/workspace/jev-adaptation/model-44/evidence/C-native-blocker.json\", \"/workspace/jev-adaptation/model-44/evidence/C-first-error.log\", \"/workspace/jev-adaptation/model-44/evidence/F-blocker.json\"], \"model_dir\": \"/workspace/jev-adaptation/model-44\", \"model_index\": 44, \"model_name\": \"RSI-Jev v6.1 VL 27B\", \"native_vllm_ascend\": \"not_run\", \"original_launcher\": \"start.native-original.sh\", \"output_dir\": \"/workspace/jev-adaptation/model-44/logs\", \"precision_probability\": \"not_run\", \"reason\": \"native loader namespace mapping failure (There is no module or parameter named layers) and reserved NPU resource; native launch is intentionally not retried\", \"routes\": \"not_run\", \"status\": \"released_blocked\"}\n",
+    "inference_stderr": ""
+  },
+  "service_started": false,
+  "port": null,
+  "native_vllm_ascend": "not_run",
+  "routes": "not_run",
+  "precision_probability": "not_run",
+  "evidence": [
+    "/workspace/jev-adaptation/model-44/evidence/C-native-blocker.json",
+    "/workspace/jev-adaptation/model-44/evidence/C-first-error.log",
+    "/workspace/jev-adaptation/model-44/evidence/F-blocker.json"
+  ],
+  "original_evidence_unchanged": true,
+  "release_state_preserved": true
+}

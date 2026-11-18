@@ -1,0 +1,20 @@
+{
+  "model_index": 44,
+  "captured_at": "2026-11-18T08:18:00+08:00",
+  "source": "live remote VS Code code-server terminal on openlibing-vllm8 via SSH port-forward; no synthetic rendering",
+  "commands": [
+    "npu-smi info | head -24; resident service health",
+    "GET /health; GET /v1/decide/info; POST /v1/systemone; POST /v1/decide",
+    "evidence/C-http-precision.json extraction and SHA256"
+  ],
+  "assets": {
+    "agent_workflow.png": "0f87ffe7fd7fcf230834ce0d10238c41492a86d0f3f7cb315c61089f886f7f59",
+    "npu_device_call.png": "73403b7088bd9cfefaa01a12f019e38730fb363a9ebfaeef47eeb5edb25f78ff",
+    "model_result.png": "09a1551e8f0da8c81c993de65bc50b520df35b867d8616fd45ec7b4bc8b43a88"
+  },
+  "service_model": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "host": "openlibing-vllm8",
+  "chip": "Ascend910 chip1",
+  "vllm_ascend": "0.30.0"
+}

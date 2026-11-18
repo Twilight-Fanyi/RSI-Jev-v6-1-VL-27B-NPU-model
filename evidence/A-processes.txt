@@ -1,0 +1,35 @@
+    PID    PPID     ELAPSED STAT COMMAND
+      1       0  2-04:53:33 Ss   /bin/bash -c while true; do sleep 3600; done
+   6420       0  2-04:53:21 Ssl  /root/codeserver/lib/node /root/codeserver --bind-addr 0.0.0.0:6988 --auth=none /workspace
+   6611    6420  2-04:53:21 Sl   /root/codeserver/lib/node /root/codeserver/out/node/entry
+   8933       1  2-04:53:16 Ss   sshd: /usr/sbin/sshd -e [listener] 0 of 10-60 startups
+  25269       1  2-04:52:44 Ss   /usr/local/python3.12.16/bin/python3 /usr/local/python3.12.16/bin/supervisord -c /etc/supervisor/supervisord.conf
+  25391   25269  2-04:52:35 Sl   python3 main/agent.py -c /opt/clabagent/config/clabagent.yml
+  25443   25391  2-04:52:34 Sl   /opt/clabagent/plugins/npu-exporter/bin/npu-exporter --ip 127.0.0.1 --port 9501
+  25635   25391  2-04:51:34 Sl   /opt/clabagent/plugins/node_exporter/bin/node_exporter --web.listen-address=127.0.0.1:9500
+  75082       1  2-01:51:16 Ssl  /root/.vscode-server/code-69047191fc427f2f92828279aae1d90d8eeda7ab --cli-data-dir /root/.vscode-server/cli agent host
+ 157930   25391  1-18:26:32 Sl   /opt/clabagent/plugins/vector/bin/vector -c /opt/clabagent/plugins/vector_blue_metric/runtime/vector_blue_metric.yml --watch-config --threads 2
+ 238417    8933    15:06:08 Ss   sshd: root@notty
+ 238428  238417    15:06:07 Ss   -bash
+ 238565  238428    15:06:07 S    sh
+ 238583  238565    15:06:07 Sl   /root/.vscode-server/code-69047191fc427f2f92828279aae1d90d8eeda7ab command-shell --cli-data-dir /root/.vscode-server/cli --parent-process-id 238565 --on-host=127.0.0.1 --on-port
+ 238636  238583    15:06:06 S    sh /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/bin/code-server --connection-token=remotessh --accept-server-license-terms --agent-host-bridge-port=44663 --agent-host-bridge-host=127.0.0.1 --start-server --enable-remote-auto-shutdown --socket-path=/tmp/code-5e3d2116-d33c-4911-8e28-bc3800e6f0a5
+ 238640  238636    15:06:06 Sl   /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/node /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/out/server-main.js --connection-token=remotessh --accept-server-license-terms --agent-host-bridge-port=44663 --agent-host-bridge-host=127.0.0.1 --start-server --enable-remote-auto-shutdown --socket-path=/tmp/code-5e3d2116-d33c-4911-8e28-bc3800e6f0a5
+ 238871  238640    15:06:05 Sl   /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/node --dns-result-order=ipv4first /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/out/bootstrap-fork --type=extensionHost --transformURIs --useHostProxy=false
+ 238884  238640    15:06:05 Sl   /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/node /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/out/bootstrap-fork --type=fileWatcher
+ 238904  238640    15:06:04 Sl   /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/node /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/out/bootstrap-fork --type=ptyHost --logsPath /root/.vscode-server/data/logs/20261117T045013
+ 238953  238871    15:06:01 Sl   /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/node /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/extensions/json-language-features/server/dist/node/jsonServerMain --node-ipc --clientProcessId=238871
+ 238959  238904    15:06:01 Ss+  /usr/bin/bash --init-file /root/.vscode-server/cli/servers/Stable-69047191fc427f2f92828279aae1d90d8eeda7ab/server/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+ 239134  238583    15:05:55 S    /bin/sh
+ 266991       1       53:32 S    sleep 3600
+ 286644    8933       05:05 Ss   sshd: root@notty
+ 286656       1       05:04 S    bash -c cd /workspace/jev-adaptation/model-170 && mkdir -p audit-native-20261118-v5 && nohup ./start.sh --model-dir /workspace/jev-adaptation/model-170/weights --output-dir /workspace/jev-adaptation/model-170/audit-native-20261118-v5 > audit-native-20261118-v5/service.log 2>&1 < /dev/null & echo STARTED:$!
+ 286658  286656       05:04 Sl   /usr/local/python3.12.16/bin/python3.12 /workspace/jev-adaptation/model-170/competition_server.py
+ 287053  286658       04:37 S    /usr/local/python3.12.16/bin/python3.12 -c from multiprocessing.resource_tracker import main;main(37)
+ 287054  286658       04:37 Sl   VLLM::EngineCore
+ 287677  287054       04:25 Sl   VLLM::Worker_TP0
+ 287678  287054       04:25 Sl   VLLM::Worker_TP1
+ 291152    8933       00:07 Ss   sshd: root@notty
+ 291163  238565       00:06 S    sleep 180
+ 291164  291152       00:06 Ss   bash -c D=/workspace/jev-adaptation/model-44; mkdir -p "$D/evidence"; date -u +%FT%TZ > "$D/evidence/A-capture-time.txt"; (source /usr/local/Ascend/cann-9.2.1/set_env.sh; source /usr/local/Ascend/nnal/atb/set_env.sh; export TORCH_DEVICE_BACKEND_AUTOLOAD=0; /usr/local/python3.12.16/bin/python3 - <<"PY" import torch,torch_npu,vllm import vllm_ascend print("torch",torch.__version__) print("torch_npu",torch_npu.__version__) print("vllm",vllm.__version__) print("vllm_ascend",getattr(vllm_ascend,"__version__","unknown")) print("npu_device_count",torch.npu.device_count()) PY ) > "$D/evidence/A-runtime-versions.txt" 2>&1 || true; npu-smi info > "$D/evidence/A-npu-smi.txt" 2>&1; ps -eo pid,ppid,etime,stat,args > "$D/evidence/A-processes.txt"; ss -ltn > "$D/evidence/A-listeners.txt" 2>&1 || true; stat -c "%n %s %i" "$D"/weights/*.safetensors > "$D/evidence/B-current-sizes.txt"; cp /tmp/model44-probe3.log "$D/evidence/C-first-error.log"; tail -30 "$D/evidence/A-runtime-versions.txt"
+ 291294  291164       00:00 R    ps -eo pid,ppid,etime,stat,args

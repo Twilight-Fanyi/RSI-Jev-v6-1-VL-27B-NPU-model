@@ -1,0 +1,60 @@
+{
+  "package_schema": "npu-adapter/1",
+  "model_index": 44,
+  "model_name": "RSI-Jev v6.1 VL 27B",
+  "repo_id": "shgao/rsi-jev-v6.1-vl-27b",
+  "revision": "d0dccc052ee844ab7481ddfacad1b7335ab394e0",
+  "source_snapshot": {
+    "repo": "https://github.com/Shanghua-Gao/RSI-Jev.git",
+    "commit": "e58526f061afd4c383d33a22b309b888f8a3e3c7"
+  },
+  "runtime": {
+    "vllm_ascend": "0.30.0",
+    "cann": "9.2.1",
+    "soc": "Ascend910/A3",
+    "dtype": "bfloat16",
+    "loader_tensor_parallel": 2,
+    "service_tensor_parallel": 1,
+    "tokenizer": "source-audit/"
+  },
+  "weights": {
+    "included": false,
+    "manifest": "lfs-manifest.json",
+    "required_external_files": [
+      "tower.safetensors",
+      "visual.safetensors",
+      "scorer.safetensors",
+      "aux_scorers.safetensors",
+      "calibration.safetensors"
+    ]
+  },
+  "evidence": {
+    "real_decision": "evidence/C-real-decision-ready.json",
+    "http_service": "evidence/C-http-service.log",
+    "precision_replay": "evidence/C-http-precision.json",
+    "max_absolute_probability_delta": 0.0,
+    "delta_interpretation": "CPU scorer replay over the captured NPU hidden state; not independent CPU tower inference",
+    "official_baseline": "not a numeric 2PP gate for adaptation track; no official score claimed"
+  },
+  "assets": {
+    "agent_workflow.png": {
+      "source": "live remote VS Code code-server terminal on openlibing-vllm8 chip1",
+      "model44_specific": true,
+      "sha256": "0f87ffe7fd7fcf230834ce0d10238c41492a86d0f3f7cb315c61089f886f7f59"
+    },
+    "npu_device_call.png": {
+      "source": "live remote VS Code code-server terminal on openlibing-vllm8 chip1",
+      "model44_specific": true,
+      "sha256": "73403b7088bd9cfefaa01a12f019e38730fb363a9ebfaeef47eeb5edb25f78ff"
+    },
+    "model_result.png": {
+      "source": "live remote VS Code code-server terminal on openlibing-vllm8 chip1",
+      "model44_specific": true,
+      "sha256": "09a1551e8f0da8c81c993de65bc50b520df35b867d8616fd45ec7b4bc8b43a88"
+    }
+  },
+  "hash_receipts": {
+    "remote_source": "evidence/REMOTE-SOURCE-SHA256SUMS.txt",
+    "package": "evidence/PACKAGE-SHA256SUMS.txt"
+  }
+}
